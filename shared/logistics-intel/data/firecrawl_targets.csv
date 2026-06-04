@@ -1,0 +1,14 @@
+id,label,url,mode,scope,limit,max_depth,why_it_matters,source_ids
+FCT01,Port Zeebrugge location crawl,https://www.portofantwerpbruges.com/en/location/zeebrugge,crawl,official Zeebrugge location pages,12,2,Discovers linked Zeebrugge business pages and official market context,S01;S37
+FCT02,Port digital products scrape,https://www.portofantwerpbruges.com/en/our-port/digital-products,scrape,official digital product pages,1,0,Captures APICS ZEDIS ETA Terminal API and data-sharing context,S02;S03;S34;S35
+FCT03,ETA Terminal Tool scrape,https://www.portofantwerpbruges.com/en/news/update-eta-terminal-tool,scrape,official container visibility page,1,0,Adds direct evidence for CSP Zeebrugge ETA and API availability,S34
+FCT04,IRP launch scrape,https://newsroom.portofantwerpbruges.com/en/press-releases/nxtport-port-of-antwerp-bruges-and-the-way-forward-launch-inbound-release-platform,scrape,official customs digitization press release,1,0,Adds customs release and software-provider integration evidence,S36
+FCT05,Maritime Logistics Zone scrape,https://www.portofantwerpbruges.com/en/maritime-logistics-zone,scrape,official Zeebrugge logistics real estate page,1,0,Adds demand-side logistics segments and multimodal/cold-chain context,S37
+FCT06,ECS careers scrape,https://www.ecs.be/en/careers/jobs/software-developer,scrape,official logistics IT vacancy,1,0,Adds explicit in-house application and software stack evidence for ECS,S38
+FCT07,CLdN news scrape,https://www.cldn.com/en/news/cldn-and-dfds-extend-zeebrugge-gothenburg-space-charter-agreement,scrape,official RoRo network news,1,0,Adds route capacity and transhipment context for CLdN and DFDS,S39
+FCT08,DFDS routes scrape,https://www.dfds.com/en/freight-ferries-and-logistics/routes-and-schedules,scrape,official ferry route directory,1,0,Adds Zeebrugge route evidence for DFDS,S40
+FCT09,UECC terminal scrape,https://uecc.com/terminal-operations/,scrape,official automotive terminal operations page,1,0,Adds explicit VDTMS track-and-trace and OEM IT integration evidence,S41
+FCT10,Routescanner CLdN scrape,https://www.routescanner.com/partners/CLdN,scrape,route platform profile,1,0,Adds CLdN network and Zeebrugge terminal connection evidence,S42
+FCT11,CSP Navis N4 deployment scrape,https://www.marinelink.com/news/csp-zeebrugge-terminal-deploys-navis-n-468887,scrape,industry TOS deployment article,1,0,Adds observed Navis N4 vendor evidence for CSP Zeebrugge,S43
+FCT12,Kaleris TOS product scrape,https://kaleris.com/solutions/terminal-operating-system/,scrape,official vendor product page,1,0,Adds N4 TOS feature and integration taxonomy evidence,S44
+FCT13,CISA Navis N4 security scrape,https://www.cisa.gov/news-events/ics-advisories/icsa-25-175-01,scrape,official security advisory,1,0,Adds current Navis N4 risk and mitigation evidence,S45

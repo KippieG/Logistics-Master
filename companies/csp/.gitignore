@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+reports/
+*.class
+*.jar
+target/
+.idea/
+.vscode/
+.DS_Store

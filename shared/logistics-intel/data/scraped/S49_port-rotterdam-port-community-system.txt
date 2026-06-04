@@ -1,0 +1,4 @@
+Source S49: Port of Rotterdam Port Community System
+URL: https://www.portofrotterdam.com/en/services/online-tools/port-community-system
+
+Firecrawl result: Port of Rotterdam describes the Port Community System as a smart information platform for port logistics, including pre-notification patterns for container terminals. This is used as a transferability comparator for Zeebrugge APICS/ZEDIS/NxtPort/IRP patterns.

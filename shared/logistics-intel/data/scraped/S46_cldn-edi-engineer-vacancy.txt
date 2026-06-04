@@ -1,0 +1,4 @@
+Source S46: CLdN EDI Engineer vacancy
+URL: https://www.cldn.com/en/careers/vacancies/edi-engineer
+
+Firecrawl search result: official CLdN vacancy for an EDI Engineer. The result describes responsibility for analysing and developing mappings between CLdN internal EDI formats and customer EDI formats. This is treated as observed job-posting evidence for EDI/customer integration work, not as proof of a named TMS or booking vendor.

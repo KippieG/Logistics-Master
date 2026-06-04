@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "data": {
+    "web": []
+  },
+  "query": "site:kbopub.economie.fgov.be ECS European Containers BE0435131508",
+  "note": "Firecrawl search returned no results. Kept as an audit artifact for the attempted official KBO/BCE lookup."
+}

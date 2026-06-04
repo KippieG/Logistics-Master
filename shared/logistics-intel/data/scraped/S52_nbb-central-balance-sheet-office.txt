@@ -1,0 +1,4 @@
+Source S52: NBB Central Balance Sheet Office
+URL: https://www.nbb.be/en/central-balance-sheet-office
+
+Firecrawl result: the National Bank of Belgium describes the Central Balance Sheet Office as the collection point for annual accounts of most companies and organisations operating in Belgium. This source is used as the official method reference for registry and financial verification.

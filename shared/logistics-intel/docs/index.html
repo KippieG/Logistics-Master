@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Zeebrugge Port Tech Intelligence</title>
+    <meta name="description" content="Portfolio-grade port-logistics intelligence dashboard for Zeebrugge: companies, terminal operators, public tech-stack signals, enrichment data and software opportunities.">
+    <meta property="og:title" content="Zeebrugge Port Tech Intelligence">
+    <meta property="og:description" content="A public-data intelligence product turning port-logistics signals into commercial software opportunities.">
+    <meta property="og:image" content="assets/zeebrugge-intelligence-hero.png">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="nav" aria-label="Project navigation">
+        <a class="nav__brand" href="#">Zeebrugge Intel</a>
+        <a href="#executive">Executive case</a>
+        <a href="#dataset">Dataset</a>
+        <a href="#signals">Signals</a>
+        <a href="#firecrawl">Firecrawl</a>
+        <a href="#stack-tags">Stack tags</a>
+        <a href="#matrix">Matrix</a>
+        <a href="#taxonomy">Taxonomy</a>
+        <a href="#opportunities">Opportunities</a>
+        <a href="#method">Method</a>
+      </nav>
+
+      <div class="hero__layout">
+        <div class="hero__copy">
+          <p class="eyebrow">Commercial intelligence portfolio</p>
+          <h1>Zeebrugge Port Tech Intelligence</h1>
+          <p class="lead">A polished intelligence product that maps port companies, terminal operators, public technology signals and software opportunities around Zeebrugge.</p>
+          <div class="actions">
+            <a class="button button--primary" href="../reports/opportunity-playbook.md">Read the playbook</a>
+            <a class="button" href="../data/companies.csv">Open dataset</a>
+            <a class="button" href="https://github.com/KippieG/zeebrugge-logistics-intel">View code</a>
+          </div>
+          <dl class="hero-facts" aria-label="Project facts">
+            <div>
+              <dt>Signal volume</dt>
+              <dd>45 sources</dd>
+            </div>
+            <div>
+              <dt>Business lens</dt>
+              <dd>5 opportunities</dd>
+            </div>
+            <div>
+              <dt>Delivery</dt>
+              <dd>Validated dashboard</dd>
+            </div>
+          </dl>
+        </div>
+
+        <figure class="hero-visual" aria-label="Zeebrugge logistics intelligence visual">
+          <img src="assets/zeebrugge-intelligence-hero.png" alt="Cinematic Zeebrugge port logistics scene with containers, RoRo lanes, rail and data overlays">
+          <figcaption>
+            <strong>Executive-ready output</strong>
+            <span>Public-source research translated into buyer segments, stack signals and opportunity hypotheses.</span>
+          </figcaption>
+        </figure>
+      </div>
+    </header>
+
+    <main>
+      <section class="band band--intro" id="executive">
+        <div class="section-head section-head--split">
+          <div>
+            <p class="eyebrow">Executive case</p>
+            <h2>Built Like A Small Intelligence Product</h2>
+          </div>
+          <p class="section-copy">The repo shows more than research notes: it demonstrates structured data modeling, source discipline, automation, validation, visual storytelling and commercial thinking in one compact project.</p>
+        </div>
+        <div class="proof-grid">
+          <article>
+            <span>01</span>
+            <h3>For recruiters</h3>
+            <p>Shows end-to-end ownership: scraping, CSV design, validation, CI, dashboard polish and clear documentation.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>For managers</h3>
+            <p>Turns noisy public information into a practical view of markets, systems, risk and opportunity.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>For commercial teams</h3>
+            <p>Identifies likely buyer pain around customs, yard visibility, terminal orchestration and API readiness.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="band" id="dataset">
+        <div class="section-head section-head--split">
+          <div>
+            <p class="eyebrow">Dataset</p>
+            <h2>Research Coverage</h2>
+          </div>
+          <p class="section-copy">A curated evidence base for understanding who operates in Zeebrugge, what systems are publicly visible and where software opportunities are likely to sit.</p>
+        </div>
+        <div class="metrics" aria-label="Dataset metrics">
+          <article class="metric metric--featured">
+            <strong>20</strong>
+            <span>companies and platforms mapped with source references</span>
+          </article>
+          <article class="metric">
+            <strong>45</strong>
+            <span>public sources registered and scraped</span>
+          </article>
+          <article class="metric">
+            <strong>13</strong>
+            <span>structured CSV datasets</span>
+          </article>
+          <article class="metric">
+            <strong>13</strong>
+            <span>Firecrawl scrape and crawl targets</span>
+          </article>
+          <article class="metric">
+            <strong>11</strong>
+            <span>Firecrawl evidence rows from search and scrape runs</span>
+          </article>
+          <article class="metric">
+            <strong>11</strong>
+            <span>vendor stack research rows with evidence labels</span>
+          </article>
+          <article class="metric">
+            <strong>5</strong>
+            <span>commercial opportunity areas</span>
+          </article>
+          <article class="metric">
+            <strong>6</strong>
+            <span>port-logistics technology layers</span>
+          </article>
+          <article class="metric">
+            <strong>18</strong>
+            <span>successful webtech scans</span>
+          </article>
+          <article class="metric">
+            <strong>17</strong>
+            <span>APZI board/segment signals</span>
+          </article>
+        </div>
+        <div class="coverage-note">
+          <p>Signals are deliberately conservative: observed facts are separated from inferred operational stack needs, which keeps the analysis credible for business conversations.</p>
+        </div>
+      </section>
+
+      <section class="band band--light" id="visuals">
+        <div class="section-head section-head--split">
+          <div>
+            <p class="eyebrow">Signal dashboard</p>
+            <h2>Research Shape At A Glance</h2>
+          </div>
+          <p class="section-copy">Four compact views show how the dataset is distributed by confidence, operating segment, evidence type and opportunity priority.</p>
+        </div>
+        <div class="chart-grid">
+          <article class="mini-chart">
+            <h3>Confidence distribution</h3>
+            <div class="bar-row"><span>High</span><div><i style="--w: 5%"></i></div><strong>1</strong></div>
+            <div class="bar-row"><span>Medium</span><div><i style="--w: 30%"></i></div><strong>6</strong></div>
+            <div class="bar-row"><span>Low</span><div><i style="--w: 65%"></i></div><strong>13</strong></div>
+          </article>
+          <article class="mini-chart">
+            <h3>Segment breakdown</h3>
+            <div class="donut-list">
+              <span><i class="dot dot--green"></i>Terminals and RoRo</span>
+              <span><i class="dot dot--teal"></i>Intermodal and warehousing</span>
+              <span><i class="dot dot--rust"></i>Forwarding and customs</span>
+              <span><i class="dot dot--steel"></i>Port/data and energy</span>
+            </div>
+          </article>
+          <article class="mini-chart">
+            <h3>Observed vs inferred</h3>
+            <div class="split-meter" aria-label="Observed inferred and mixed evidence distribution">
+              <span class="split-meter__observed">Observed</span>
+              <span class="split-meter__mixed">Mixed</span>
+              <span class="split-meter__inferred">Inferred</span>
+            </div>
+            <p>Port-community systems are strongest; operational stack signals need field validation.</p>
+          </article>
+          <article class="mini-chart">
+            <h3>Opportunity priority</h3>
+            <div class="priority-grid" aria-label="Opportunity priority matrix">
+              <span class="priority-cell priority-cell--high">Yard visibility</span>
+              <span class="priority-cell priority-cell--high">Customs automation</span>
+              <span class="priority-cell priority-cell--medium">ETA forecasting</span>
+              <span class="priority-cell priority-cell--medium">Sales intelligence</span>
+              <span class="priority-cell priority-cell--medium">API readiness</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="band band--light" id="signals">
+        <div class="section-head section-head--split">
+          <div>
+            <p class="eyebrow">Technology signals</p>
+            <h2>Where The Digital Layer Is Visible</h2>
+          </div>
+          <p class="section-copy">The strongest evidence sits at the ecosystem layer, where port-community platforms, terminal workflows and customs tooling create repeatable software needs.</p>
+        </div>
+        <div class="signal-grid">
+          <article>
+            <span class="signal-index">Observed</span>
+            <h3>Port community systems</h3>
+            <p>APICS, ZEDIS, NxtPort/RX-SeaPort, and IRP are the strongest verified ecosystem signals.</p>
+          </article>
+          <article>
+            <span class="signal-index">Inferred</span>
+            <h3>Terminal operations</h3>
+            <p>Automotive, RoRo, and container operators likely depend on TOS, YMS, gate systems, EDI, and customer visibility.</p>
+          </article>
+          <article>
+            <span class="signal-index">Recurring</span>
+            <h3>Intermodal logistics</h3>
+            <p>UK/Ireland flows create recurring needs around customs, rail planning, trailer visibility, and warehouse coordination.</p>
+          </article>
+          <article>
+            <span class="signal-index">Commercial</span>
+            <h3>Data interoperability</h3>
+            <p>Clean APIs and event data are becoming a practical differentiator for shippers and logistics-tech vendors.</p>
+          </article>
+        </div>
+        <div class="tech-strip">
+          <span>Drupal</span>
+          <span>Next.js</span>
+          <span>React</span>
+          <span>WordPress</span>
+          <span>Cloudflare</span>
+          <span>Google Tag Manager</span>
+          <span>Cookiebot</span>
+          <span>OneTrust</span>
+        </div>
+      </section>
+
+      <section class="band" id="firecrawl">
+        <div class="section-head section-head--split">
+          <div>
+            <p class="eyebrow">Firecrawl expansion</p>
+            <h2>More Scraped Evidence, Better Stack Signals</h2>
+          </div>
+          <p class="section-copy">Firecrawl search+scrape runs expanded the evidence base with official Zeebrugge pages, route-network pages, vacancy signals and terminal-system descriptions.</p>
+        </div>
+        <div class="signal-grid">
+          <article>
+            <span class="signal-index">ETA/API</span>
+            <h3>Terminal visibility</h3>
+            <p>ETA Terminal Tool evidence now ties CSP Zeebrugge into arrival visibility, cargo-opening windows and API integration via NxtPort.</p>
+          </article>
+          <article>
+            <span class="signal-index">Customs</span>
+            <h3>IRP integration</h3>
+            <p>Inbound Release Platform evidence points to customs software integrations and Zeebrugge early-mover testing with terminal operators.</p>
+          </article>
+          <article>
+            <span class="signal-index">Vacancy</span>
+            <h3>ECS in-house stack</h3>
+            <p>The ECS software-developer vacancy names .NET, Angular, MS SQL Server, Azure, Docker, Kubernetes, EDA and DDD.</p>
+          </article>
+          <article>
+            <span class="signal-index">Terminal</span>
+            <h3>UECC VDTMS</h3>
+            <p>UECC publicly names real-time tracking, web-based tracking, OEM integrations and a Vehicle Distribution and Terminal Management System.</p>
+          </article>
+          <article>
+            <span class="signal-index">TOS</span>
+            <h3>CSP Navis N4</h3>
+            <p>MarineLink/Navis deployment evidence upgrades CSP Zeebrugge from generic TOS inference to observed Navis N4 / Kaleris N4 evidence.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="band" id="stack-tags">
+        <div class="section-head section-head--split">
+          <div>
+            <p class="eyebrow">Full tech-stack view</p>
+            <h2>All Stack Tags In One Place</h2>
+          </div>
+          <p class="section-copy">A clean overview of the operational systems, port-community platforms, planning tools, analytics signals and visible web-channel technologies found or inferred in the research.</p>
+        </div>
+        <div class="stack-overview">
+          <article>
+            <h3>Observed port and data layer</h3>
+            <div class="tag-cloud" aria-label="Observed port and data layer tags">
+              <span class="tag tag--observed">APICS</span>
+              <span class="tag tag--observed">ZEDIS</span>
+              <span class="tag tag--observed">NxtPort</span>
+              <span class="tag tag--observed">RX-SeaPort</span>
+              <span class="tag tag--observed">IRP</span>
+              <span class="tag tag--observed">Terminal API</span>
+              <span class="tag tag--observed">APICA digital twin</span>
+              <span class="tag tag--observed">Smart cameras</span>
+              <span class="tag tag--observed">ETA Terminal Tool</span>
+            </div>
+          </article>
+          <article>
+            <h3>Terminal, yard and transport systems</h3>
+            <div class="tag-cloud" aria-label="Terminal yard and transport system tags">
+              <span class="tag tag--observed">Navis N4</span>
+              <span class="tag tag--observed">Kaleris N4</span>
+              <span class="tag tag--inferred">TOS</span>
+              <span class="tag tag--inferred">YMS</span>
+              <span class="tag tag--inferred">VMS</span>
+              <span class="tag tag--observed">Expert Decking</span>
+              <span class="tag tag--observed">PrimeRoute</span>
+              <span class="tag tag--inferred">Gate OCR</span>
+              <span class="tag tag--inferred">Crane/OCR options</span>
+              <span class="tag tag--inferred">Vehicle inventory</span>
+              <span class="tag tag--inferred">Trailer visibility</span>
+              <span class="tag tag--inferred">Slot booking</span>
+              <span class="tag tag--inferred">Rail planning</span>
+              <span class="tag tag--inferred">TMS</span>
+              <span class="tag tag--inferred">WMS</span>
+              <span class="tag tag--inferred">EDI/API</span>
+            </div>
+          </article>
+          <article>
+            <h3>Customs, analytics and energy operations</h3>
+            <div class="tag-cloud" aria-label="Customs analytics and energy operations tags">
+              <span class="tag tag--mixed">Customs declaration software</span>
+              <span class="tag tag--mixed">Document automation</span>
+              <span class="tag tag--mixed">Release-status queues</span>
+              <span class="tag tag--mixed">Microsoft Analytics</span>
+              <span class="tag tag--mixed">Reporting Services</span>
+              <span class="tag tag--mixed">BI dashboards</span>
+              <span class="tag tag--mixed">Dwell-time models</span>
+              <span class="tag tag--mixed">ETA prediction</span>
+              <span class="tag tag--mixed">Demand forecasts</span>
+              <span class="tag tag--mixed">SCADA/OT</span>
+              <span class="tag tag--mixed">Nominations</span>
+              <span class="tag tag--mixed">Compliance reporting</span>
+            </div>
+          </article>
+          <article>
+            <h3>Company engineering and terminal management</h3>
+            <div class="tag-cloud" aria-label="Company engineering and terminal management tags">
+              <span class="tag tag--mixed">.NET</span>
+              <span class="tag tag--mixed">Angular</span>
+              <span class="tag tag--mixed">C#</span>
+              <span class="tag tag--mixed">MS SQL Server</span>
+              <span class="tag tag--mixed">TSQL</span>
+              <span class="tag tag--mixed">ASP.NET Core</span>
+              <span class="tag tag--mixed">Azure</span>
+              <span class="tag tag--mixed">Docker</span>
+              <span class="tag tag--mixed">Kubernetes</span>
+              <span class="tag tag--mixed">Event-driven architecture</span>
+              <span class="tag tag--mixed">Domain-driven design</span>
+              <span class="tag tag--mixed">VDTMS</span>
+              <span class="tag tag--mixed">Track-and-trace</span>
+              <span class="tag tag--mixed">Web-based tracking</span>
+              <span class="tag tag--mixed">OEM IT integration</span>
+            </div>
+          </article>
+          <article>
+            <h3>Visible web-channel signals</h3>
+            <div class="tag-cloud" aria-label="Visible web channel technology tags">
+              <span class="tag tag--web">Drupal</span>
+              <span class="tag tag--web">WordPress</span>
+              <span class="tag tag--web">Next.js</span>
+              <span class="tag tag--web">React</span>
+              <span class="tag tag--web">Vue</span>
+              <span class="tag tag--web">Cloudflare</span>
+              <span class="tag tag--web">Google Tag Manager</span>
+              <span class="tag tag--web">Google Analytics</span>
+              <span class="tag tag--web">Cookiebot</span>
+              <span class="tag tag--web">OneTrust</span>
+              <span class="tag tag--web">Bootstrap</span>
+              <span class="tag tag--web">jQuery</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="band band--commercial">
+        <div class="section-head section-head--split">
+          <div>
+            <p class="eyebrow">Commercial read</p>
+            <h2>What A Manager Sees In One Minute</h2>
+          </div>
+          <p class="section-copy">The portfolio value is the translation layer: raw public sources become target segments, system hypotheses, confidence labels and next actions.</p>
+        </div>
+        <div class="commercial-grid">
+          <article>
+            <h3>Market shape</h3>
+            <p>Zeebrugge clusters automotive, RoRo, UK-Ireland shortsea, containers, energy logistics, forwarding and customs work.</p>
+          </article>
+          <article>
+            <h3>Buying triggers</h3>
+            <p>Visibility gaps, release workflows, gate coordination, dwell time and integration friction point toward real software budgets.</p>
+          </article>
+          <article>
+            <h3>Execution proof</h3>
+            <p>The repo ships with validation, CI, visual smoke tests, reproducible scripts and source-linked datasets.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="band band--light" id="company-stacks">
+        <div class="section-head section-head--split">
+          <div>
+            <p class="eyebrow">Company tech stacks</p>
+            <h2>Every Company, Every Stack Signal</h2>
+          </div>
+          <p class="section-copy">A company-by-company view combining observed platform evidence, inferred operational systems, visible website technology and hiring signals from the refreshed scrape.</p>
+        </div>
+        <div class="stack-table" role="table" aria-label="Company technology stack signals">
+          <div class="stack-table__row stack-table__row--head" role="row">
+            <div role="columnheader">Company</div>
+            <div role="columnheader">Observed / public signal</div>
+            <div role="columnheader">Inferred operational stack</div>
+            <div role="columnheader">Webtech and hiring signal</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">Port of Antwerp-Bruges</div>
+            <div role="cell">APICS, ZEDIS, ETA Terminal Tool, Terminal API, APICA digital twin, smart cameras, NxtPort, IRP</div>
+            <div role="cell">Port-community APIs, digital twin operations, event data sharing</div>
+            <div role="cell">Cloudflare, Drupal, Next.js, React, GTM, GA, Bootstrap</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">NxtPort / RX-SeaPort</div>
+            <div role="cell">NxtPort, RX-SeaPort, IRP, customs coordination</div>
+            <div role="cell">API/event platform, identity, permissions, partner connectors</div>
+            <div role="cell">WordPress, Vue; API/product/data roles to research</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">ECS / 2XL</div>
+            <div role="cell">Microsoft Analytics, Reporting Services, in-house apps, customer/supplier interfaces, .NET, Angular, MS SQL Server, Azure, Docker, Kubernetes</div>
+            <div role="cell">TMS, WMS, BI, rail planning, customer portals, customs integrations</div>
+            <div role="cell">Official vacancy confirms modern engineering stack, event-driven architecture and domain-driven design</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">NDQ Logistics</div>
+            <div role="cell">No named operational vendor</div>
+            <div role="cell">WMS, TMS, customs tooling, ferry integrations, customer visibility</div>
+            <div role="cell">WordPress, GTM, GA, Cookiebot, jQuery</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">International Car Operators</div>
+            <div role="cell">Customs/fiscal representation and digitalization signal</div>
+            <div role="cell">TOS, YMS, VMS, vehicle inventory, EDI/API, gate/camera systems, OEM portals</div>
+            <div role="cell">Drupal, GTM; terminal planning, IT and customs roles to research</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">Wallenius Wilhelmsen Zeebrugge</div>
+            <div role="cell">No specific Zeebrugge vendor in seed sources</div>
+            <div role="cell">Automotive terminal systems, global shipping EDI, customer visibility, yard management</div>
+            <div role="cell">GTM, Cookiebot; APZI cargo-handler board signal</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">MOSOLF Carcenter Zeebrugge</div>
+            <div role="cell">No named operational vendor</div>
+            <div role="cell">Vehicle inventory, VMS/YMS, damage inspection, OEM/customer portals, transport planning</div>
+            <div role="cell">WordPress, jQuery; PDI and yard roles to research</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">PSA Zeebrugge</div>
+            <div role="cell">No named operational vendor in seed source</div>
+            <div role="cell">TOS, EDI, rail/barge planning, yard/gate integrations, PCS integration</div>
+            <div role="cell">Cloudflare, Drupal, GTM, GA</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">CSP Zeebrugge Terminal</div>
+            <div role="cell">Navis N4 / Kaleris N4 TOS, Expert Decking, PrimeRoute, ZPMC cranes, VBS web app, TOS-connected apps, datawarehouse, BI tools, Java, JavaScript, Groovy, Python, CSS, HTML, SQL Oracle, Git</div>
+            <div role="cell">Container TOS, crane/OCR options, EDI/API, PCS integrations, terminal planning</div>
+            <div role="cell">WordPress, GTM, GA, jQuery; Navis N4 deployment plus IT Analyst Developer TOS/datawarehouse/BI signal</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">Fluxys LNG Terminal Zeebrugge</div>
+            <div role="cell">No named operational vendor in seed sources</div>
+            <div role="cell">SCADA/OT, nominations, scheduling, safety systems, compliance reporting, cybersecurity</div>
+            <div role="cell">React, GTM, GA, OneTrust, Bootstrap</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">Alltraco</div>
+            <div role="cell">AEO/customs capability</div>
+            <div role="cell">Customs declaration software, forwarding TMS, document management, customer communication tools</div>
+            <div role="cell">GTM, Bootstrap; customs declarant roles to research</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">Notman Logistics</div>
+            <div role="cell">No named operational vendor</div>
+            <div role="cell">Fleet planning, telematics, basic WMS, invoicing/accounting</div>
+            <div role="cell">Web scan failed with HTTP 503</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">Dens Ocean Shipping & Logistics</div>
+            <div role="cell">No named operational vendor</div>
+            <div role="cell">Forwarding TMS, shipping schedules, documentation, customs integrations</div>
+            <div role="cell">No visible webtech signal found</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">RBZ</div>
+            <div role="cell">No named operational vendor</div>
+            <div role="cell">Vessel agency software, port-call workflows, APICS/ZEDIS, documentation systems</div>
+            <div role="cell">Cloudflare, GTM, jQuery</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">Herfurth / M-Star Freight</div>
+            <div role="cell">No named operational vendor</div>
+            <div role="cell">Forwarding TMS, customs tooling, carrier EDI, customer portal</div>
+            <div role="cell">Vue, GTM, GA, jQuery</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">DFDS</div>
+            <div role="cell">Zeebrugge freight route evidence, no named operational vendor</div>
+            <div role="cell">Booking systems, EDI/API, trailer planning, driverless freight planning, customs workflows</div>
+            <div role="cell">React, GTM; Firecrawl confirms Zeebrugge-Gothenburg, Fredrikstad and Immingham route context</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">CLdN</div>
+            <div role="cell">Zeebrugge route network and CLdN RoRo platform evidence</div>
+            <div role="cell">Booking, RoRo terminal planning, EDI/API, Brexit/customs workflows</div>
+            <div role="cell">Next.js, React, GTM, GA, Cookiebot, OneTrust; Routescanner network evidence</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">C.RO Ports / C.RO Terminal</div>
+            <div role="cell">Routescanner lists C.RO Ports Zeebrugge terminal connections</div>
+            <div role="cell">RoRo TOS/YMS, gate OCR, EDI/API, customer integrations</div>
+            <div role="cell">Next.js, React, GTM, GA, Cookiebot, OneTrust</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">UECC</div>
+            <div role="cell">Technology-driven operations, real-time tracking, web tracking, OEM/customer IT integration, VDTMS</div>
+            <div role="cell">Automotive terminal software, voyage/vehicle visibility, EDI/API</div>
+            <div role="cell">Cloudflare, WordPress, GTM; strongest observed automotive terminal-management signal</div>
+          </div>
+          <div class="stack-table__row" role="row">
+            <div role="cell">KESS</div>
+            <div role="cell">No named operational vendor in seed sources</div>
+            <div role="cell">Shipping operations, automotive EDI, route planning, customer visibility</div>
+            <div role="cell">Bootstrap, Go Daddy Website Builder</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="band" id="matrix">
+        <div class="section-head">
+          <p class="eyebrow">Company stack matrix</p>
+          <h2>Who Needs Which Systems</h2>
+        </div>
+        <div class="matrix" role="table" aria-label="Logistics company technology stack matrix">
+          <div class="matrix__row matrix__row--head" role="row">
+            <div role="columnheader">Segment</div>
+            <div role="columnheader">Examples</div>
+            <div role="columnheader">Likely systems</div>
+            <div role="columnheader">Confidence</div>
+          </div>
+          <div class="matrix__row" role="row">
+            <div role="cell">Port authority and data layer</div>
+            <div role="cell">Port of Antwerp-Bruges, NxtPort / RX-SeaPort</div>
+            <div role="cell">APICS, ZEDIS, IRP, APIs, digital twin, smart cameras</div>
+            <div role="cell"><span class="pill pill--high">High / medium</span></div>
+          </div>
+          <div class="matrix__row" role="row">
+            <div role="cell">Automotive and RoRo terminals</div>
+            <div role="cell">ICO, Wallenius Wilhelmsen, MOSOLF, UECC, C.RO, KESS</div>
+            <div role="cell">TOS, YMS, vehicle inventory, gate OCR, EDI/API, OEM portals</div>
+            <div role="cell"><span class="pill pill--medium">Medium / low</span></div>
+          </div>
+          <div class="matrix__row" role="row">
+            <div role="cell">Container and deepsea terminals</div>
+            <div role="cell">CSP Zeebrugge Terminal, PSA Zeebrugge</div>
+            <div role="cell">Container TOS, crane/OCR options, rail/barge planning, PCS integration</div>
+            <div role="cell"><span class="pill pill--medium">Medium</span></div>
+          </div>
+          <div class="matrix__row" role="row">
+            <div role="cell">Intermodal and warehousing</div>
+            <div role="cell">ECS / 2XL, NDQ Logistics, DFDS, CLdN</div>
+            <div role="cell">TMS, WMS, BI, rail planning, ETA prediction, customs integrations</div>
+            <div role="cell"><span class="pill pill--medium">Medium / low</span></div>
+          </div>
+          <div class="matrix__row" role="row">
+            <div role="cell">Forwarders, customs, agencies</div>
+            <div role="cell">Alltraco, Dens Ocean, RBZ, Herfurth / M-Star, Notman</div>
+            <div role="cell">Customs declaration software, freight TMS, document automation, APICS/ZEDIS workflows</div>
+            <div role="cell"><span class="pill pill--low">Medium / low</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="band band--light" id="taxonomy">
+        <div class="section-head">
+          <p class="eyebrow">Stack taxonomy</p>
+          <h2>The Useful Layers To Track</h2>
+        </div>
+        <div class="taxonomy-grid">
+          <article>
+            <span>01</span>
+            <h3>Port community and data sharing</h3>
+            <p>APICS, ZEDIS, NxtPort, RX-SeaPort, terminal APIs, event exchange, and permissions.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Customs and release</h3>
+            <p>IRP, declarations, document automation, missing-document checks, and release status.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Terminal orchestration</h3>
+            <p>TOS, YMS, gate OCR, camera integrations, vehicle inventory, and crane/OCR options.</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>Transport and warehouse planning</h3>
+            <p>TMS, WMS, rail planning, slot booking, trailer visibility, and ETA prediction.</p>
+          </article>
+          <article>
+            <span>05</span>
+            <h3>Analytics and forecasting</h3>
+            <p>BI, dwell-time models, gate peaks, labor-demand estimates, and exception scoring.</p>
+          </article>
+          <article>
+            <span>06</span>
+            <h3>Energy terminal operations</h3>
+            <p>SCADA/OT, nominations, scheduling, safety systems, and compliance reporting.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="band" id="opportunities">
+        <div class="section-head section-head--split">
+          <div>
+            <p class="eyebrow">Opportunity map</p>
+            <h2>Software Ideas With A Buyer Lens</h2>
+          </div>
+          <p class="section-copy">Each opportunity is framed from operational pain, buyer segment and go-to-market logic instead of being a generic feature list.</p>
+        </div>
+        <div class="opportunity-list">
+          <article>
+            <span>01</span>
+            <div>
+              <h3>Yard visibility</h3>
+              <p>Track dwell time, location, release status, and handover state for vehicles, trailers, and overflow capacity.</p>
+            </div>
+          </article>
+          <article>
+            <span>02</span>
+            <div>
+              <h3>Customs automation</h3>
+              <p>Build around IRP/NxtPort/RX-SeaPort instead of isolated document portals.</p>
+            </div>
+          </article>
+          <article>
+            <span>03</span>
+            <div>
+              <h3>ETA and capacity forecasting</h3>
+              <p>Connect vessel schedules, terminal events, gate peaks, and warehouse labor planning.</p>
+            </div>
+          </article>
+          <article>
+            <span>04</span>
+            <div>
+              <h3>Sales intelligence</h3>
+              <p>Score logistics companies by digital maturity, public tech signals, and likely pain points.</p>
+            </div>
+          </article>
+          <article>
+            <span>05</span>
+            <div>
+              <h3>API/data readiness audit</h3>
+              <p>Assess which operators can expose clean event data and where integration gaps block shippers.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="band band--light" id="method">
+        <div class="section-head section-head--split">
+          <div>
+            <p class="eyebrow">Method</p>
+            <h2>How The Signals Were Scored</h2>
+          </div>
+          <p class="section-copy">The credibility comes from labeling what is observed, what is inferred and what still needs field validation.</p>
+        </div>
+        <div class="method-grid">
+          <article>
+            <h3>Observed</h3>
+            <p>A public source names the system, platform, product, or vendor directly.</p>
+          </article>
+          <article>
+            <h3>Inferred</h3>
+            <p>The stack is operationally likely from terminal, customs, warehouse, RoRo, rail, or forwarding activity, but no vendor is named.</p>
+          </article>
+          <article>
+            <h3>Unknown</h3>
+            <p>No reliable public signal was found. These entries need interviews, job-posting checks, vendor cases, or direct outreach.</p>
+          </article>
+        </div>
+        <div class="workflow">
+          <article>
+            <span>1</span>
+            <p>Register sources in CSV with source type and notes.</p>
+          </article>
+          <article>
+            <span>2</span>
+            <p>Scrape text extracts with a dependency-free Python script.</p>
+          </article>
+          <article>
+            <span>3</span>
+            <p>Map companies to services, stack signals, confidence, and source IDs.</p>
+          </article>
+          <article>
+            <span>4</span>
+            <p>Validate structure locally and in GitHub Actions.</p>
+          </article>
+        </div>
+        <div class="download-strip" aria-label="Repository artifacts">
+          <a href="../data/companies.csv">Companies CSV</a>
+          <a href="../data/stack_taxonomy.csv">Stack taxonomy</a>
+          <a href="../data/opportunities.csv">Opportunities CSV</a>
+          <a href="../data/sources.csv">Source register</a>
+          <a href="../reports/analysis.md">Analysis report</a>
+          <a href="../reports/enrichment-guide.md">Enrichment guide</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Built as a public research prototype. Validate inferred stack data before commercial use. Source data, scraped extracts, and analysis are included in the repository.</p>
+    </footer>
+  </body>
+</html>

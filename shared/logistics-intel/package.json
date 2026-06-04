@@ -1,0 +1,18 @@
+{
+  "name": "zeebrugge-logistics-intel",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Zeebrugge port-tech intelligence: companies, terminal operators, tech-stack signals, scraping, enrichment and opportunity mapping.",
+  "scripts": {
+    "validate:data": "python3 scripts/validate_dataset.py",
+    "scan:webtech": "python3 scripts/detect_web_tech.py",
+    "scrape:sources": "python3 scripts/scrape_seed.py",
+    "scrape:firecrawl": "python3 scripts/firecrawl_collect.py",
+    "scrape:apzi": "python3 scripts/extract_apzi_members.py",
+    "test:visual": "playwright test",
+    "check": "npm run validate:data && npm run test:visual"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.0"
+  }
+}
