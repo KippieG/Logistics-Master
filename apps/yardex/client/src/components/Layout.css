@@ -1,0 +1,116 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: var(--blue-dark);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255,255,255,.15);
+  margin-bottom: 1.25rem;
+}
+
+.logo-icon { font-size: 1.75rem; }
+.logo-title { font-size: 1.1rem; font-weight: 700; line-height: 1; }
+.logo-sub { font-size: 0.7rem; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.08em; }
+
+.sidebar-company {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.company-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--blue-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.company-alias { font-weight: 600; font-size: 0.875rem; }
+.company-zone { font-size: 0.7rem; opacity: 0.65; margin-top: 1px; }
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: calc(var(--radius) - 2px);
+  color: rgba(255,255,255,.75);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.15s;
+  position: relative;
+}
+.nav-item:hover { background: rgba(255,255,255,.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,.15); color: white; }
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--accent);
+  color: var(--blue-dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.sidebar-logout {
+  background: transparent;
+  color: rgba(255,255,255,.5);
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  border: none;
+  text-align: left;
+  transition: all 0.15s;
+}
+.sidebar-logout:hover { color: white; background: rgba(255,255,255,.08); }
+
+.main-content {
+  margin-left: 240px;
+  flex: 1;
+  padding: 2rem;
+  max-width: 1100px;
+}
+
+@media (max-width: 768px) {
+  .sidebar { width: 100%; min-height: auto; position: relative; flex-direction: row; flex-wrap: wrap; }
+  .main-content { margin-left: 0; }
+}

@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Claude Code
+.claude/
+
+# Environment / secrets
+.env
+.env.local
+*.key
+
+# Logs
+*.log
+
+# Node
+node_modules/
+package-lock.json

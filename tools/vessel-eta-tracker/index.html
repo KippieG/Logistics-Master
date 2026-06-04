@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VesselETA · CSP Zeebrugge</title>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0b1018"/>
+  <meta name="description" content="Real-time vessel ETA tracking and berth planning for CSP Zeebrugge terminal operations"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg:#090e17; --surface:#0d1420; --surface2:#111929; --surface3:#172133;
+      --border:#1a2d44; --text:#d8e8f6; --text2:#9ab5cc; --muted:#4f6d88;
+      --accent:#1d6fa8; --accent-hi:#2d8fd0; --accent-glow:rgba(45,143,208,.18);
+      --green:#27a448; --yellow:#c48a0a; --orange:#c95c1a; --red:#b83232; --purple:#7c52c8;
+      --font:'Inter','Segoe UI',system-ui,sans-serif;
+      --hh:52px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+    /* ── Header ── */
+    header{
+      background:linear-gradient(90deg,#07101e 0%,#0b1828 100%);
+      border-bottom:1px solid var(--border);
+      padding:0 1.1rem;height:var(--hh);
+      display:flex;align-items:center;gap:.7rem;flex-shrink:0;
+    }
+    .brand{display:flex;align-items:center;gap:.65rem;margin-right:.15rem;}
+    .brand-logo{
+      width:32px;height:32px;
+      background:linear-gradient(145deg,#1a5c8e,#0f3d5e);
+      border-radius:8px;display:flex;align-items:center;justify-content:center;
+      font-size:16px;flex-shrink:0;border:1px solid rgba(45,143,208,.25);
+      box-shadow:0 0 12px rgba(29,111,168,.2);
+    }
+    .brand-text h1{font-size:.88rem;font-weight:700;letter-spacing:-.01em;color:#e2eefa;}
+    .brand-text p{font-size:.62rem;color:var(--muted);margin-top:1px;letter-spacing:.01em;}
+    .h-div{width:1px;height:20px;background:var(--border);flex-shrink:0;}
+
+    /* Status area */
+    .conn-area{display:flex;align-items:center;gap:.5rem;}
+    .status-pill{
+      display:flex;align-items:center;gap:.32rem;
+      background:var(--surface2);border:1px solid var(--border);
+      padding:.22rem .62rem;border-radius:20px;font-size:.7rem;color:var(--muted);
+      transition:all .3s;
+    }
+    .status-pill.live{border-color:rgba(39,164,72,.35);background:rgba(39,164,72,.06);color:#3fc05a;}
+    .status-pill.demo-s{border-color:rgba(124,82,200,.35);background:rgba(124,82,200,.06);color:#a07fe0;}
+    .status-pill.err{border-color:rgba(184,50,50,.35);background:rgba(184,50,50,.06);color:#d94f3d;}
+    .sdot{width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s;}
+    .sdot.live{background:#27a448;animation:blink 2.2s ease-in-out infinite;}
+    .sdot.demo{background:#7c52c8;animation:blink 2.2s ease-in-out infinite;}
+    .sdot.err{background:var(--red);}
+    .sdot.conn{background:#c48a0a;animation:blink 1s ease-in-out infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+    .msg-rate{font-size:.67rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
+    .msg-rate span{color:var(--text2);font-weight:600;}
+
+    .btn{padding:.28rem .8rem;border-radius:6px;font-size:.76rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;}
+    .btn:hover{filter:brightness(1.1);}
+    .btn:active{filter:brightness(.92);}
+    .btn-reconnect{background:rgba(29,111,168,.22);color:#5aabdb;border:1px solid rgba(29,111,168,.3);}
+    .btn-reconnect:hover{background:rgba(29,111,168,.35);}
+    .btn-demo{background:transparent;border:1px solid var(--border);color:var(--muted);}
+    .btn-demo:hover{background:var(--surface2);color:var(--text2);}
+    .btn-demo.active-demo{border-color:rgba(124,82,200,.4);color:#a07fe0;}
+    .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2);}
+    .btn-icon{padding:.26rem .54rem;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;font-size:.8rem;cursor:pointer;transition:all .15s;}
+    .btn-icon:hover{background:var(--surface2);color:var(--text);}
+
+    .h-right{margin-left:auto;display:flex;align-items:center;gap:.38rem;}
+
+    /* vessel count in header */
+    .h-vessel-ct{
+      display:flex;flex-direction:column;align-items:center;
+      background:var(--surface2);border:1px solid var(--border);
+      padding:.18rem .6rem;border-radius:6px;min-width:48px;
+    }
+    .h-vessel-ct-n{font-size:.95rem;font-weight:700;color:var(--accent-hi);line-height:1;font-variant-numeric:tabular-nums;}
+    .h-vessel-ct-l{font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:1px;}
+
+    /* ── KPI Bar ── */
+    #kpi-bar{background:var(--surface);border-bottom:1px solid var(--border);display:flex;flex-shrink:0;height:58px;}
+    .kpi{padding:0 1rem;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:108px;}
+    .kpi-label{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+    .kpi-val{font-size:1.22rem;font-weight:700;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums;}
+    .kpi-sub{font-size:.62rem;color:var(--muted);}
+    .cv-blue{color:var(--accent-hi);} .cv-green{color:#3fc05a;} .cv-yellow{color:#d4a020;} .cv-red{color:#d94f3d;} .cv-muted{color:var(--muted);}
+
+    .wx-kpi{padding:0 1rem;display:flex;flex-direction:column;justify-content:center;gap:4px;border-right:1px solid var(--border);min-width:165px;}
+    .wx-label{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+    .wx-row{display:flex;gap:.7rem;align-items:center;}
+    .wx-item{display:flex;align-items:baseline;gap:.22rem;font-size:.76rem;font-weight:600;color:var(--text);}
+    .wx-item small{font-size:.6rem;color:var(--muted);font-weight:400;}
+    .wx-src{font-size:.57rem;color:var(--muted);margin-top:1px;}
+
+    /* ── Layout ── */
+    .main-layout{display:grid;grid-template-columns:1fr 440px;grid-template-rows:1fr 178px;flex:1;overflow:hidden;}
+
+    /* ── Map ── */
+    .map-wrap{position:relative;grid-column:1;grid-row:1;overflow:hidden;}
+    #map{height:100%;background:#060d16;}
+    .leaflet-container{background:#060d16!important;}
+    .leaflet-control-zoom{border:1px solid var(--border)!important;border-radius:6px!important;overflow:hidden!important;}
+    .leaflet-control-zoom a{background:var(--surface)!important;color:var(--text2)!important;border:none!important;width:26px!important;height:26px!important;line-height:26px!important;font-size:15px!important;}
+    .leaflet-control-zoom a:hover{background:var(--surface2)!important;}
+    .map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none;display:flex;gap:.4rem;}
+    .demo-pill{background:rgba(93,74,168,.88);color:#fff;padding:.28rem .92rem;border-radius:20px;font-size:.67rem;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(10px);display:none;border:1px solid rgba(140,110,220,.3);}
+    .demo-pill.on{display:block;}
+    .conflict-pill{position:absolute;top:10px;right:10px;z-index:999;background:rgba(160,40,35,.85);color:#fff;padding:.28rem .72rem;border-radius:6px;font-size:.67rem;font-weight:700;backdrop-filter:blur(8px);display:none;pointer-events:none;border:1px solid rgba(200,80,70,.35);}
+    .conflict-pill.on{display:block;}
+    .connecting-overlay{
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      background:rgba(6,13,22,.6);z-index:990;
+      flex-direction:column;gap:.75rem;pointer-events:none;
+      transition:opacity .35s;
+    }
+    .connecting-overlay.hidden{opacity:0;pointer-events:none;display:none;}
+    .co-ring{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent-hi);border-radius:50%;animation:spin 1s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .co-label{font-size:.75rem;color:var(--text2);font-weight:500;}
+
+    /* ── Sidebar ── */
+    #sidebar{background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;grid-column:2;grid-row:1/3;}
+    .filter-bar{padding:.35rem .7rem;border-bottom:1px solid var(--border);display:flex;gap:.25rem;align-items:center;flex-shrink:0;flex-wrap:nowrap;}
+    .filter-bar+.filter-bar{border-top:none;padding-top:.25rem;padding-bottom:.35rem;}
+    .search{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.24rem .55rem;border-radius:5px;font-size:.74rem;outline:none;}
+    .search:focus{border-color:var(--accent-hi);}
+    .search::placeholder{color:var(--muted);}
+    .pill{padding:.14rem .45rem;border-radius:20px;font-size:.61rem;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;transition:all .12s;}
+    .pill:hover{background:var(--surface2);}
+    .pill.on{background:var(--surface3);color:var(--text);border-color:var(--accent);}
+    .sec-head{padding:.4rem .72rem;border-bottom:1px solid var(--surface2);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:rgba(255,255,255,.012);}
+    .sec-title{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+    .sec-badge{font-size:.63rem;font-weight:700;color:var(--accent-hi);}
+
+    /* Vessel list */
+    #vessel-list{overflow-y:auto;flex:1;min-height:80px;}
+    #vessel-list::-webkit-scrollbar,#alerts-list::-webkit-scrollbar{width:3px;}
+    #vessel-list::-webkit-scrollbar-thumb,#alerts-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+    .vrow{padding:.48rem .72rem;border-bottom:1px solid rgba(26,45,68,.55);cursor:pointer;transition:background .1s;}
+    .vrow:hover{background:rgba(255,255,255,.025);}
+    .vrow.sel{background:rgba(29,111,168,.08);border-left:2px solid var(--accent-hi);padding-left:calc(.72rem - 2px);}
+    .vrow-top{display:flex;align-items:center;gap:.28rem;margin-bottom:3px;}
+    .vname{font-weight:600;font-size:.78rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text);}
+    .vmeta-row{display:flex;gap:.45rem;}
+    .vmeta{font-size:.63rem;color:var(--muted);}
+    .tag-svc{background:rgba(29,111,168,.16);color:#5aabdb;padding:1px 5px;border-radius:3px;font-size:.58rem;font-weight:700;letter-spacing:.02em;}
+    .tag-berth{background:rgba(124,82,200,.16);color:#a07fe0;padding:1px 5px;border-radius:3px;font-size:.58rem;font-weight:700;}
+    .tag-type{background:rgba(39,164,72,.1);color:#4ac96a;padding:1px 5px;border-radius:3px;font-size:.58rem;font-weight:700;}
+    .etab{padding:1px 6px;border-radius:10px;font-size:.61rem;font-weight:700;}
+    .e-early{background:rgba(46,168,74,.1);color:#3fc05a;}
+    .e-ok{background:rgba(46,168,74,.1);color:#3fc05a;}
+    .e-warn{background:rgba(196,138,10,.1);color:#d4a020;}
+    .e-late{background:rgba(201,92,26,.1);color:#dc7030;}
+    .e-crit{background:rgba(192,57,43,.1);color:#d94f3d;}
+    .conf-icon{font-size:.62rem;color:#dc7030;flex-shrink:0;}
+
+    /* Detail panel */
+    #vdetail{border-top:1px solid var(--border);background:var(--surface2);flex-shrink:0;overflow:hidden;max-height:0;transition:max-height .3s ease;}
+    #vdetail.open{max-height:280px;}
+    .dinn{padding:.65rem .72rem;}
+    .dhead{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.52rem;}
+    .dname{font-size:.83rem;font-weight:700;color:var(--text);}
+    .dvoy{font-size:.63rem;color:var(--muted);margin-top:2px;}
+    .dclose{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.8rem;padding:0 .2rem;line-height:1;transition:color .1s;}
+    .dclose:hover{color:var(--text);}
+    .dgrid{display:grid;grid-template-columns:1fr 1fr;gap:.35rem;}
+    .dfield{display:flex;flex-direction:column;gap:2px;}
+    .df-label{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+    .df-val{font-size:.75rem;font-weight:600;color:var(--text);}
+    .dev-row{margin-top:.48rem;background:var(--surface3);border-radius:6px;padding:.4rem .55rem;display:flex;align-items:center;border:1px solid var(--border);}
+    .dev-label{font-size:.65rem;color:var(--muted);}
+    .dev-status{font-size:.6rem;color:var(--muted);margin-top:1px;}
+    .dev-val{margin-left:auto;font-size:.9rem;font-weight:700;}
+    .impact-row{margin-top:.35rem;background:rgba(184,50,50,.06);border:1px solid rgba(184,50,50,.2);border-radius:5px;padding:.35rem .55rem;font-size:.66rem;color:#d94f3d;line-height:1.4;}
+
+    /* Alerts */
+    #alerts-list{max-height:90px;overflow-y:auto;flex-shrink:0;}
+    .alert-row{padding:.32rem .72rem;border-bottom:1px solid rgba(26,45,68,.45);display:flex;align-items:center;gap:.35rem;font-size:.66rem;}
+    .adot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+    .adot.crit{background:var(--red);}
+    .adot.warn{background:var(--yellow);}
+    .adot.conf{background:var(--orange);}
+    .atext{flex:1;color:var(--text2);line-height:1.35;}
+    .atime{color:var(--muted);font-size:.6rem;flex-shrink:0;}
+
+    /* Chart */
+    .chart-sec{padding:.48rem .72rem .6rem;border-top:1px solid var(--border);flex-shrink:0;}
+    .chart-sec h3{font-size:.59rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:.35rem;}
+
+    /* ── Berth Timeline ── */
+    #timeline{grid-column:1;grid-row:2;background:var(--surface);border-top:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+    .tl-head{padding:0 .85rem;height:27px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0;}
+    .tl-head-title{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+    .tl-shift-label{font-size:.61rem;color:var(--muted);}
+    .tl-body{display:flex;flex:1;overflow:hidden;}
+    .tl-labels{width:40px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;padding-top:20px;}
+    .tl-blabel{flex:1;display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:700;color:var(--muted);border-bottom:1px solid rgba(26,45,68,.5);}
+    .tl-blabel:last-child{border-bottom:none;}
+    .tl-scroll{flex:1;overflow-x:auto;overflow-y:hidden;position:relative;}
+    .tl-scroll::-webkit-scrollbar{height:3px;}
+    .tl-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+    .tl-inner{position:relative;height:100%;min-width:100%;}
+    .tl-axis{position:absolute;top:0;left:0;right:0;height:20px;border-bottom:1px solid var(--border);}
+    .tl-tick{position:absolute;top:0;height:20px;display:flex;align-items:center;padding-left:3px;font-size:.58rem;color:var(--muted);border-left:1px solid rgba(26,45,68,.6);white-space:nowrap;}
+    .tl-now-line{position:absolute;top:0;bottom:0;width:1px;background:var(--accent-hi);opacity:.55;z-index:10;pointer-events:none;}
+    .tl-now-line::after{content:'NOW';position:absolute;top:2px;left:3px;font-size:.52rem;color:var(--accent-hi);font-weight:700;letter-spacing:.03em;}
+    .tl-rows{position:absolute;top:20px;left:0;right:0;bottom:0;display:flex;flex-direction:column;}
+    .tl-row{flex:1;position:relative;border-bottom:1px solid rgba(26,45,68,.45);}
+    .tl-row:last-child{border-bottom:none;}
+    .tl-bar{position:absolute;top:18%;height:64%;border-radius:3px;cursor:pointer;display:flex;align-items:center;overflow:hidden;transition:filter .15s;min-width:3px;}
+    .tl-bar:hover{filter:brightness(1.25);z-index:20;}
+    .tl-bar.sel{outline:2px solid var(--accent-hi);outline-offset:1px;z-index:20;}
+    .tl-bar.bg-ok  {background:rgba(39,164,72,.2);border:1px solid rgba(39,164,72,.18);}
+    .tl-bar.bg-warn{background:rgba(196,138,10,.2);border:1px solid rgba(196,138,10,.18);}
+    .tl-bar.bg-late{background:rgba(201,92,26,.2);border:1px solid rgba(201,92,26,.18);}
+    .tl-bar.bg-crit{background:rgba(184,50,50,.22);border:1px solid rgba(184,50,50,.18);}
+    .tl-bar-lbl{font-size:.58rem;font-weight:700;padding:0 .35rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;}
+    .tl-sched-marker{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.28);pointer-events:none;}
+
+    /* ── Settings drawer ── */
+    #settings-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:800;display:none;}
+    #settings-overlay.on{display:block;}
+    #settings-panel{position:fixed;right:0;top:0;bottom:0;width:310px;background:var(--surface);border-left:1px solid var(--border);z-index:900;transform:translateX(100%);transition:transform .22s ease;display:flex;flex-direction:column;overflow:hidden;}
+    #settings-panel.on{transform:translateX(0);}
+    .sp-hd{padding:.8rem 1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+    .sp-hd-title{font-size:.82rem;font-weight:700;}
+    .sp-body{padding:1rem;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:1rem;}
+    .sp-sec-title{font-size:.61rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.42rem;padding-bottom:.28rem;border-bottom:1px solid var(--surface3);}
+    .sp-field{display:flex;flex-direction:column;gap:.25rem;}
+    .sp-label{font-size:.76rem;font-weight:500;color:var(--text2);}
+    .sp-sub{font-size:.64rem;color:var(--muted);}
+    .sp-input{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.3rem .6rem;border-radius:5px;font-size:.78rem;outline:none;width:100%;font-family:monospace;}
+    .sp-input:focus{border-color:var(--accent-hi);}
+    .sp-row{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid rgba(26,45,68,.45);}
+    .sp-row:last-child{border-bottom:none;}
+    .toggle{width:34px;height:18px;background:var(--border);border-radius:9px;position:relative;cursor:pointer;border:none;transition:background .18s;flex-shrink:0;}
+    .toggle.on{background:var(--accent-hi);}
+    .toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .18s;}
+    .toggle.on::after{transform:translateX(16px);}
+    .btn-apply{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.35rem .9rem;font-size:.78rem;font-weight:600;cursor:pointer;width:100%;transition:filter .15s;}
+    .btn-apply:hover{filter:brightness(1.1);}
+    .btn-apply.reconnect-btn{background:rgba(39,164,72,.22);color:#3fc05a;border:1px solid rgba(39,164,72,.3);}
+
+    /* ── Print report ── */
+    @media print{
+      body{background:#fff!important;color:#000!important;height:auto;overflow:visible;}
+      header,#kpi-bar,.main-layout,#toasts,#settings-overlay,#settings-panel{display:none!important;}
+      #print-report{display:block!important;}
+    }
+    #print-report{display:none;font-family:Arial,sans-serif;padding:1cm;}
+    .pr-hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #0a3a6e;padding-bottom:.4cm;margin-bottom:.5cm;}
+    .pr-brand{font-size:1rem;font-weight:700;color:#0a3a6e;}
+    .pr-brand small{display:block;font-size:.65rem;font-weight:400;color:#555;margin-top:2px;}
+    .pr-meta{text-align:right;font-size:.68rem;color:#555;}
+    .pr-section{margin-top:.45cm;}
+    .pr-sec-title{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#555;border-bottom:1px solid #ccc;padding-bottom:.15cm;margin-bottom:.25cm;}
+    .pr-table{width:100%;border-collapse:collapse;font-size:.72rem;}
+    .pr-table th{background:#e8f0f8;padding:4px 7px;text-align:left;font-weight:700;border:1px solid #ccc;font-size:.63rem;text-transform:uppercase;letter-spacing:.05em;}
+    .pr-table td{padding:3px 7px;border:1px solid #e0e0e0;}
+    .pr-table tr:nth-child(even){background:#f8f9fb;}
+    .pr-alert-item{padding:2px 0;border-bottom:1px solid #eee;font-size:.72rem;}
+    .pr-footer{margin-top:.5cm;font-size:.6rem;color:#888;border-top:1px solid #ddd;padding-top:.2cm;display:flex;justify-content:space-between;}
+
+    /* ── Toasts ── */
+    #toasts{position:fixed;bottom:1rem;left:1rem;z-index:9999;display:flex;flex-direction:column-reverse;gap:.3rem;pointer-events:none;}
+    .toast{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent-hi);padding:.45rem .7rem;border-radius:7px;box-shadow:0 4px 28px rgba(0,0,0,.6);max-width:300px;animation:tin .2s ease;display:flex;gap:.36rem;align-items:flex-start;pointer-events:auto;}
+    .toast.crit{border-left-color:var(--red);}
+    .toast.warn{border-left-color:var(--yellow);}
+    .toast.ok{border-left-color:var(--green);}
+    .t-ico{font-size:.77rem;flex-shrink:0;margin-top:1px;}
+    .t-ttl{font-size:.71rem;font-weight:600;}
+    .t-msg{font-size:.64rem;color:var(--muted);margin-top:1px;}
+    @keyframes tin{from{transform:translateX(-14px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+    /* Map tooltip */
+    .vtip{background:var(--surface)!important;border:1px solid var(--border)!important;color:var(--text)!important;font-family:var(--font)!important;font-size:11px!important;padding:7px 11px!important;border-radius:6px!important;box-shadow:0 4px 20px rgba(0,0,0,.6)!important;line-height:1.55!important;}
+
+    /* Placeholder */
+    .placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.8rem 1rem;color:var(--muted);gap:.32rem;text-align:center;}
+    .ph-ico{font-size:1.7rem;opacity:.18;}
+    .ph-ttl{font-size:.76rem;font-weight:600;color:var(--text2);}
+    .ph-sub{font-size:.67rem;}
+
+    /* Approach badge */
+    .tag-appr{background:rgba(196,138,10,.18);color:#d4a020;padding:1px 5px;border-radius:3px;font-size:.58rem;font-weight:700;letter-spacing:.02em;}
+
+    /* Flag emoji in vessel list */
+    .vrow-flag{font-size:.7rem;flex-shrink:0;line-height:1;}
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <div class="brand">
+    <div class="brand-logo">⚓</div>
+    <div class="brand-text">
+      <h1>VesselETA</h1>
+      <p>CSP Zeebrugge · Terminal Operations</p>
+    </div>
+  </div>
+  <div class="h-div"></div>
+
+  <div class="conn-area">
+    <div class="status-pill" id="status-pill">
+      <span class="sdot" id="sdot"></span>
+      <span id="stext">Initializing…</span>
+    </div>
+    <div class="msg-rate" id="msg-rate-el" style="display:none"><span id="msg-rate-n">0</span> msg/min</div>
+    <button class="btn btn-reconnect" id="reconnect-btn" onclick="doReconnect()" style="display:none">⟳ Reconnect</button>
+  </div>
+
+  <div class="h-div"></div>
+  <div class="h-vessel-ct" id="h-vessel-ct">
+    <span class="h-vessel-ct-n" id="h-vn">0</span>
+    <span class="h-vessel-ct-l">Vessels</span>
+  </div>
+
+  <div class="h-right">
+    <button class="btn btn-demo" id="demo-btn" onclick="toggleDemo()">▶ Demo</button>
+    <div class="h-div"></div>
+    <button class="btn-icon" title="Shift handover report" onclick="printReport()">🖨</button>
+    <button class="btn-icon" title="Export CSV" onclick="doExport()">↓ CSV</button>
+    <button class="btn-icon" title="Settings" onclick="openSettings()">⚙</button>
+  </div>
+</header>
+
+<!-- ── KPI Bar ── -->
+<div id="kpi-bar">
+  <div class="kpi">
+    <span class="kpi-label">Next Arrival</span>
+    <span class="kpi-val cv-blue" id="k-next-rel">—</span>
+    <span class="kpi-sub" id="k-next-name">—</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">On Time</span>
+    <span class="kpi-val cv-green" id="k-ontime">—</span>
+    <span class="kpi-sub" id="k-ontime-sub">within ±30 min</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Avg Deviation</span>
+    <span class="kpi-val cv-muted" id="k-avgdev">—</span>
+    <span class="kpi-sub">all scheduled vessels</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Berth Conflicts</span>
+    <span class="kpi-val cv-red" id="k-conf">0</span>
+    <span class="kpi-sub" id="k-conf-sub">ops window overlap</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Critical Delays</span>
+    <span class="kpi-val cv-red" id="k-crits">0</span>
+    <span class="kpi-sub">&gt;120 min behind</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Approaching</span>
+    <span class="kpi-val cv-muted" id="k-appr">0</span>
+    <span class="kpi-sub">&lt; 25 km to port</span>
+  </div>
+  <div class="wx-kpi">
+    <span class="wx-label">North Sea · Wandelaar</span>
+    <div class="wx-row">
+      <div class="wx-item">💨 <span id="wx-wind">—</span> <small>kn</small></div>
+      <div class="wx-item">🌊 <span id="wx-wave">—</span> <small>m</small></div>
+      <div class="wx-item">👁 <span id="wx-vis">—</span> <small>nm</small></div>
+    </div>
+    <div class="wx-src" id="wx-src">Loading weather…</div>
+  </div>
+  <div class="kpi" style="border-right:none;margin-left:auto;">
+    <span class="kpi-label">Current Time</span>
+    <span class="kpi-val cv-muted" style="font-size:.82rem;font-weight:600" id="k-upd">—</span>
+    <span class="kpi-sub" id="k-feed">—</span>
+  </div>
+</div>
+
+<!-- ── Main ── -->
+<div class="main-layout">
+
+  <!-- Map -->
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div class="map-overlay">
+      <div class="demo-pill" id="demo-pill">● DEMO · Simulated AIS Data</div>
+    </div>
+    <div class="conflict-pill" id="conflict-pill">⚠ Berth conflict detected</div>
+    <div class="connecting-overlay" id="conn-overlay">
+      <div class="co-ring"></div>
+      <div class="co-label" id="conn-overlay-label">Connecting to AIS stream…</div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div class="filter-bar">
+      <input class="search" id="srch" placeholder="Search vessel, destination, berth…" oninput="renderList()"/>
+      <button class="pill on" id="fp-all"  onclick="setFilter('all',this)">All</button>
+      <button class="pill"    id="fp-4h"   onclick="setFilter('4h',this)">4h</button>
+      <button class="pill"    id="fp-12h"  onclick="setFilter('12h',this)">12h</button>
+      <button class="pill"    id="fp-appr" onclick="setFilter('appr',this)">Appr</button>
+    </div>
+    <div class="filter-bar" style="padding-top:0;border-top:none;gap:.25rem;">
+      <span style="font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600;flex-shrink:0;">Type:</span>
+      <button class="pill on" id="ft-all"   onclick="setTypeFilter('all',this)">All</button>
+      <button class="pill"    id="ft-cargo" onclick="setTypeFilter('cargo',this)">Cargo</button>
+      <button class="pill"    id="ft-tank"  onclick="setTypeFilter('tank',this)">Tanker</button>
+      <button class="pill"    id="ft-zee"   onclick="setTypeFilter('zee',this)">→ BEZEE</button>
+    </div>
+
+    <div class="sec-head">
+      <span class="sec-title">Incoming Vessels</span>
+      <span class="sec-badge" id="live-ct">0 live</span>
+    </div>
+    <div id="vessel-list">
+      <div class="placeholder">
+        <div class="ph-ico">🚢</div>
+        <div class="ph-ttl">Waiting for AIS data</div>
+        <div class="ph-sub">Connecting to aisstream.io…</div>
+      </div>
+    </div>
+
+    <div id="vdetail"><div id="dinn" class="dinn"></div></div>
+
+    <div class="sec-head" style="flex-shrink:0;">
+      <span class="sec-title">Alerts</span>
+      <span class="sec-badge" id="alert-ct">0</span>
+    </div>
+    <div id="alerts-list">
+      <div class="placeholder" style="padding:.55rem;">
+        <span style="font-size:.65rem;color:var(--muted)">No active alerts</span>
+      </div>
+    </div>
+
+    <div class="chart-sec">
+      <h3>ETA Deviation History (min)</h3>
+      <canvas id="etaChart" height="80"></canvas>
+    </div>
+  </div>
+
+  <!-- Berth Arrival Timeline -->
+  <div id="timeline">
+    <div class="tl-head">
+      <span class="tl-head-title">Berth Arrival Timeline · 24 h window</span>
+      <span class="tl-shift-label" id="tl-shift-lbl"></span>
+    </div>
+    <div class="tl-body">
+      <div class="tl-labels" id="tl-labels"></div>
+      <div class="tl-scroll">
+        <div class="tl-inner" id="tl-inner">
+          <div class="tl-axis" id="tl-axis"></div>
+          <div class="tl-rows" id="tl-rows"></div>
+          <div class="tl-now-line" id="tl-now-line" style="left:0%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Settings drawer -->
+<div id="settings-overlay" onclick="closeSettings()"></div>
+<div id="settings-panel">
+  <div class="sp-hd">
+    <span class="sp-hd-title">Settings</span>
+    <button class="btn-icon" onclick="closeSettings()">✕</button>
+  </div>
+  <div class="sp-body">
+    <div>
+      <div class="sp-sec-title">AIS Connection</div>
+      <div style="display:flex;flex-direction:column;gap:.65rem">
+        <div class="sp-field">
+          <span class="sp-label">API Key (aisstream.io)</span>
+          <span class="sp-sub">Your key is stored locally in the browser</span>
+          <input class="sp-input" id="sp-apikey" type="password" placeholder="Enter API key…"/>
+        </div>
+        <button class="btn-apply reconnect-btn" onclick="applyApiKey()">⟳ Connect with this key</button>
+      </div>
+    </div>
+    <div>
+      <div class="sp-sec-title">Deviation Thresholds</div>
+      <div style="display:flex;flex-direction:column;gap:.65rem">
+        <div class="sp-field">
+          <span class="sp-label">Warning threshold (min)</span>
+          <span class="sp-sub">Yellow / orange badge above this deviation</span>
+          <input class="sp-input" id="sp-warn" type="number" value="30" min="5" max="240" style="font-family:var(--font)"/>
+        </div>
+        <div class="sp-field">
+          <span class="sp-label">Critical threshold (min)</span>
+          <span class="sp-sub">Trigger alert and toast notification</span>
+          <input class="sp-input" id="sp-crit" type="number" value="120" min="30" max="480" style="font-family:var(--font)"/>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="sp-sec-title">Notifications</div>
+      <div>
+        <div class="sp-row"><span class="sp-label">Berth conflict alerts</span><button class="toggle on" id="tog-conf" onclick="this.classList.toggle('on')"></button></div>
+        <div class="sp-row"><span class="sp-label">Early arrival warnings</span><button class="toggle on" id="tog-early" onclick="this.classList.toggle('on')"></button></div>
+      </div>
+    </div>
+    <div>
+      <div class="sp-sec-title">Map Display</div>
+      <div>
+        <div class="sp-row"><span class="sp-label">Approach lane</span><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="sp-row"><span class="sp-label">Pilot station marker</span><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="sp-row"><span class="sp-label">Anchorage zone</span><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+      </div>
+    </div>
+    <div>
+      <div class="sp-sec-title">Terminal</div>
+      <div class="sp-field">
+        <span class="sp-label">Terminal name</span>
+        <input class="sp-input" id="sp-term" type="text" value="CSP Zeebrugge" style="font-family:var(--font)"/>
+      </div>
+    </div>
+    <button class="btn-apply" onclick="applySettings()">Apply Settings</button>
+  </div>
+</div>
+
+<!-- Print Report -->
+<div id="print-report">
+  <div class="pr-hd">
+    <div>
+      <div class="pr-brand">⚓ VesselETA <small>CSP Zeebrugge · Terminal Operations</small></div>
+    </div>
+    <div class="pr-meta" id="pr-meta"></div>
+  </div>
+  <div class="pr-section">
+    <div class="pr-sec-title">Vessel Schedule Status</div>
+    <table class="pr-table">
+      <thead><tr><th>Vessel</th><th>Service</th><th>Voyage</th><th>Berth</th><th>Sched ETA</th><th>Calc ETA</th><th>Deviation</th><th>Status</th></tr></thead>
+      <tbody id="pr-tbody"></tbody>
+    </table>
+  </div>
+  <div class="pr-section">
+    <div class="pr-sec-title">Active Alerts</div>
+    <div id="pr-alerts-body"></div>
+  </div>
+  <div class="pr-section">
+    <div class="pr-sec-title">Berth Conflicts</div>
+    <div id="pr-conf-body"></div>
+  </div>
+  <div class="pr-footer">
+    <span>Generated: <span id="pr-gen"></span></span>
+    <span>VesselETA · CSP Zeebrugge Terminal Operations</span>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<script>
+// ─── Config ───────────────────────────────────────────────────────────────────
+const DEFAULT_API_KEY = '897a66335782442231c37a9761fcce9accd8f6f3';
+const LS_KEY = 'vesseleta_apikey';
+
+function getApiKey() {
+  return localStorage.getItem(LS_KEY) || DEFAULT_API_KEY;
+}
+
+// Use local proxy when running via server.js, otherwise try direct (may fail in browser)
+function getWsUrl() {
+  const loc = window.location;
+  if (loc.hostname === 'localhost' || loc.hostname === '127.0.0.1') {
+    return `ws://${loc.host}/ais`;
+  }
+  // On a real domain (e.g. GitHub Pages) try direct aisstream connection
+  return 'wss://stream.aisstream.io/v0/stream';
+}
+
+function buildSubscription(key) {
+  return JSON.stringify({
+    APIKey: key,
+    BoundingBoxes: [BBOX],
+    FilterMessageTypes: ['PositionReport','ShipStaticData','StandardClassBPositionReport']
+  });
+}
+
+// ─── Reference data ───────────────────────────────────────────────────────────
+const PORT  = { lat:51.3476, lon:3.1963 };
+const PILOT = { lat:51.2341, lon:2.8982 };
+const BBOX  = [[50.8, 1.5],[52.2, 4.8]]; // North Sea approach to Zeebrugge
+const MAX_VESSELS = 60;
+const TL_H  = 24;
+
+const BERTHS = [
+  { id:'B1', depth:16.5 },
+  { id:'B2', depth:16.5 },
+  { id:'B3', depth:15.0 },
+  { id:'B4', depth:15.0 },
+  { id:'A1', depth:13.5 },
+];
+
+const SPECS = {
+  '477307900': { teu:14386, loa:366, draft:14.5, type:'ULCV', ops:26, agent:'COSCO Shipping Agencies (Belgium)' },
+  '477551300': { teu:19923, loa:399, draft:15.5, type:'ULCV', ops:32, agent:'OOCL (Belgium) N.V.' },
+  '563048800': { teu: 8800, loa:299, draft:14.2, type:'LCS',  ops:20, agent:'MSC Belgium N.V.' },
+  '232026676': { teu:20388, loa:400, draft:15.5, type:'ULCV', ops:34, agent:'Evergreen Shipping (Belgium)' },
+  '477973600': { teu:13092, loa:366, draft:14.5, type:'ULCV', ops:26, agent:'COSCO Shipping Agencies (Belgium)' },
+  '355786000': { teu:11356, loa:334, draft:14.0, type:'LCS',  ops:22, agent:'Evergreen Shipping (Belgium)' },
+  '371613000': { teu:19224, loa:395, draft:15.2, type:'ULCV', ops:30, agent:'MSC Belgium N.V.' },
+  '477609800': { teu:19100, loa:400, draft:15.5, type:'ULCV', ops:30, agent:'COSCO Shipping Agencies (Belgium)' },
+};
+
+const DEMO_SEED = [
+  { mmsi:'477307900', name:'COSCO SHIPPING AQUARIUS', svc:'AEX', voy:'AEX-041W', berth:'B1', lat:51.32, lon:2.98, sog:6.5,  dev:-45  },
+  { mmsi:'477551300', name:'OOCL HONG KONG',          svc:'EC2', voy:'EC2-019E', berth:'B2', lat:51.45, lon:1.62, sog:12.5, dev:138  },
+  { mmsi:'563048800', name:'MSC ALLEGRA',             svc:'AEX', voy:'AEX-042W', berth:'B2', lat:52.05, lon:2.82, sog:16.2, dev:22   },
+  { mmsi:'232026676', name:'EVER GOLDEN',             svc:'FE4', voy:'FE4-078W', berth:'B3', lat:51.88, lon:2.45, sog:15.1, dev:-18  },
+  { mmsi:'477973600', name:'COSCO EUROPE',            svc:'AEX', voy:'AEX-043W', berth:'B1', lat:52.22, lon:3.48, sog:17.0, dev:82   },
+  { mmsi:'355786000', name:'EVER ACE',                svc:'FE4', voy:'FE4-079W', berth:'B4', lat:51.28, lon:3.12, sog:8.2,  dev:8    },
+  { mmsi:'371613000', name:'MSC OSCAR',               svc:'EC2', voy:'EC2-020E', berth:'A1', lat:51.95, lon:3.92, sog:16.8, dev:-12  },
+  { mmsi:'477609800', name:'CSCL GLOBE',              svc:'AEX', voy:'AEX-044W', berth:'B4', lat:51.72, lon:3.75, sog:11.8, dev:44   },
+];
+
+// Expected arrivals schedule (for cross-referencing live vessels)
+const SCHEDULE = {};
+DEMO_SEED.forEach(s => { SCHEDULE[s.mmsi] = s; SCHEDULE[s.name] = s; });
+
+// ─── Vessel relevance & type helpers ─────────────────────────────────────────
+const ZEE_DESTS = ['ZEE','BEZEE','BRUGGE','BRUG','ZBRG','GHENT','GENT','ANTW','TERN','GHNT'];
+
+function isRelevantVessel(v) {
+  if (SPECS[v.mmsi]) return true;
+  const t = v.shipType;
+  const dest = (v.dest || '').toUpperCase();
+  // Explicitly drop leisure / pure fishing
+  if (t === 36 || t === 37) return false; // sailing / pleasure craft
+  if (t === 30) return false;             // fishing
+  // Keep any vessel with Zeebrugge-area destination
+  if (dest && ZEE_DESTS.some(d => dest.includes(d))) return true;
+  // Keep cargo + tankers
+  if (t && t >= 70 && t <= 89) return true;
+  // Keep service/pilot/SAR/towing
+  if (t && (t === 50 || t === 51 || t === 52 || (t >= 31 && t <= 35))) return true;
+  // No type yet → keep if moving (commercial ships move at 5+ kn)
+  if (!t && v.sog > 3) return true;
+  // Type known but not a good category and no ZEE destination → drop
+  if (t) return false;
+  return false;
+}
+
+function shipTypeName(t) {
+  if (!t) return '';
+  if (t >= 70 && t <= 79) return 'CARGO';
+  if (t === 70) return 'CARGO';
+  if (t === 71) return 'CONTAINER';
+  if (t === 72) return 'BULKER';
+  if (t === 73) return 'CONTAINER';
+  if (t === 74) return 'CONTAINER';
+  if (t >= 80 && t <= 89) return 'TANKER';
+  if (t === 80) return 'TANKER';
+  if (t === 84) return 'LNG';
+  if (t >= 60 && t <= 69) return 'PASS';
+  if (t >= 50 && t <= 59) return 'SVC';
+  if (t >= 30 && t <= 39) return 'FISH';
+  return '';
+}
+
+function vesselRelevanceScore(v) {
+  let score = 0;
+  const dest = (v.dest || '').toUpperCase();
+  if (ZEE_DESTS.some(d => dest.includes(d))) score += 100;
+  if (SPECS[v.mmsi]) score += 80;
+  if (v.schedEta) score += 60;
+  const t = v.shipType;
+  if (t && t >= 70 && t <= 89) score += 40;
+  if (v.distKm) score -= Math.min(v.distKm / 5, 30); // closer = higher score
+  return score;
+}
+
+// ─── Render throttle ─────────────────────────────────────────────────────────
+let _renderPending = false;
+function scheduleRender() {
+  if (_renderPending) return;
+  _renderPending = true;
+  setTimeout(() => {
+    _renderPending = false;
+    detectConflicts();
+    renderList(); renderTimeline(); updateKPIs(); updCounters(); updTime(); updateNextArrivalKPI();
+  }, 600);
+}
+
+// ─── App state ────────────────────────────────────────────────────────────────
+let ws=null, vessels={}, markers={}, vesselLabels={}, selectedMmsi=null;
+let etaHist=[], etaChart=null, map=null;
+let demoMode=false, demoTimer=null, wxTimer=null;
+let curFilter='all', alertLog=[], alerted=new Set(), conflicts=[];
+let approachLine=null;
+let CFG = { warnMin:30, critMin:120 };
+let reconnectTimer=null, reconnectDelay=3000, isConnecting=false;
+let msgCount=0, msgRateVal=0;
+let totalMsgsReceived=0;
+
+// ─── Map ──────────────────────────────────────────────────────────────────────
+function initMap() {
+  map = L.map('map',{zoomControl:false}).setView([51.42, 2.55], 8);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'© OpenStreetMap contributors © CARTO', maxZoom:19
+  }).addTo(map);
+  L.control.zoom({position:'bottomright'}).addTo(map);
+  map.on('zoom', () => {
+    Object.keys(vessels).forEach(mmsi => updateLabel(mmsi));
+  });
+
+  L.marker([PORT.lat, PORT.lon],{ icon:L.divIcon({
+    html:`<div style="background:linear-gradient(135deg,#1a5a8a,#0f3d5e);color:#b8d8f0;padding:3px 9px;border-radius:5px;font-size:10px;font-weight:700;white-space:nowrap;border:1px solid rgba(100,170,220,.3);box-shadow:0 2px 10px rgba(0,0,0,.45)">⚓ CSP Zeebrugge</div>`,
+    iconAnchor:[65,12], className:''
+  })}).addTo(map);
+
+  L.marker([PILOT.lat, PILOT.lon],{ icon:L.divIcon({
+    html:`<div style="background:rgba(28,55,95,.85);color:#c8d8e8;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;white-space:nowrap;border:1px solid rgba(80,130,180,.3)">🚢 Wandelaar Pilot</div>`,
+    iconAnchor:[52,10], className:''
+  })}).addTo(map);
+
+  L.circle([51.22, 2.95],{ radius:11000, color:'#c48a0a', weight:1, fillOpacity:.03, dashArray:'5,5'})
+    .addTo(map).bindTooltip('Outer Anchorage Area',{className:'vtip'});
+
+  L.rectangle(BBOX,{ color:'#1d6fa8', weight:1, fillOpacity:.018, dashArray:'6,5' }).addTo(map);
+
+  L.polyline([[50.85,1.55],[51.05,1.92],[51.18,2.35],[51.28,2.78],[PORT.lat,PORT.lon]],{
+    color:'#1d6fa8', weight:1.5, opacity:.16, dashArray:'4,7'
+  }).addTo(map);
+}
+
+// ─── Timeline ─────────────────────────────────────────────────────────────────
+function initTimeline() {
+  document.getElementById('tl-labels').innerHTML =
+    BERTHS.map(b=>`<div class="tl-blabel">${b.id}</div>`).join('');
+  document.getElementById('tl-rows').innerHTML =
+    BERTHS.map(b=>`<div class="tl-row" id="tlr-${b.id}"></div>`).join('');
+}
+
+function renderTimeline() {
+  const now = Date.now();
+  const totalMs = TL_H * 3600000;
+  const inner = document.getElementById('tl-inner');
+  const scrollW = (inner.parentElement.offsetWidth || 700);
+  inner.style.width = Math.max(scrollW, 700) + 'px';
+
+  const axisEl = document.getElementById('tl-axis');
+  axisEl.innerHTML = '';
+  for (let h = 0; h <= TL_H; h += 2) {
+    const tick = document.createElement('div');
+    tick.className = 'tl-tick';
+    tick.style.left = (h/TL_H*100) + '%';
+    tick.textContent = new Date(now + h*3600000).toLocaleTimeString('nl-BE',{hour:'2-digit',minute:'2-digit'});
+    axisEl.appendChild(tick);
+  }
+
+  const hr = new Date().getHours();
+  const shift = hr>=6&&hr<14?'Early Shift 06:00–14:00':hr>=14&&hr<22?'Late Shift 14:00–22:00':'Night Shift 22:00–06:00';
+  document.getElementById('tl-shift-lbl').textContent =
+    new Date().toLocaleDateString('nl-BE',{day:'2-digit',month:'short',year:'numeric'})+' · '+shift;
+
+  BERTHS.forEach(berth => {
+    const rowEl = document.getElementById('tlr-'+berth.id);
+    if (!rowEl) return;
+    rowEl.innerHTML = '';
+    Object.values(vessels).filter(v => v.berth===berth.id && v.calcEta).forEach(v => {
+      const sp = SPECS[v.mmsi] || { ops:24 };
+      const opsMs   = sp.ops * 3600000;
+      const startMs = v.calcEta.getTime() - now;
+      const lPct    = (startMs / totalMs) * 100;
+      const wPct    = (opsMs   / totalMs) * 100;
+      if (lPct + wPct < 0 || lPct > 100) return;
+      const cl = Math.max(0, lPct);
+      const cw = Math.min(wPct, 100 - cl);
+      const bar = document.createElement('div');
+      bar.className = `tl-bar ${tlCls(v.dev)} ${selectedMmsi===v.mmsi?'sel':''}`;
+      bar.style.left  = cl + '%';
+      bar.style.width = Math.max(cw, 0.4) + '%';
+      bar.onclick = () => selectVessel(v.mmsi);
+      bar.title = `${v.name}  ·  ETA ${fmtTime(v.calcEta)}  ·  ${v.dev!==undefined?(v.dev>0?'+':'')+v.dev+' min':'—'}`;
+      if (v.schedEta && wPct > 0) {
+        const sm = ((v.schedEta.getTime()-now - startMs) / opsMs) * 100;
+        if (sm >= 0 && sm <= 100) {
+          const m = document.createElement('div');
+          m.className = 'tl-sched-marker';
+          m.style.left = sm + '%';
+          bar.appendChild(m);
+        }
+      }
+      const short = v.name.split(' ').slice(-1)[0];
+      const devStr = v.dev!==undefined ? ` ${v.dev>0?'+':''}${v.dev}m` : '';
+      const lbl = document.createElement('span');
+      lbl.className = 'tl-bar-lbl';
+      lbl.style.color = etaTextCol(v.dev);
+      lbl.textContent = short + devStr;
+      bar.appendChild(lbl);
+      rowEl.appendChild(bar);
+    });
+  });
+
+  // Now line
+  document.getElementById('tl-now-line').style.left = '0%';
+}
+
+function tlCls(d) {
+  if (d===undefined||d<30) return 'bg-ok';
+  if (d<120) return 'bg-warn';
+  if (d<240) return 'bg-late';
+  return 'bg-crit';
+}
+function etaTextCol(d) {
+  if (d===undefined||d<30) return '#3fc05a';
+  if (d<120) return '#d4a020';
+  if (d<240) return '#dc7030';
+  return '#d94f3d';
+}
+
+// ─── Berth conflict detection ─────────────────────────────────────────────────
+function detectConflicts() {
+  conflicts = [];
+  BERTHS.forEach(berth => {
+    const bv = Object.values(vessels).filter(v => v.berth===berth.id && v.calcEta);
+    for (let i=0; i<bv.length-1; i++) {
+      for (let j=i+1; j<bv.length; j++) {
+        const a=bv[i], b=bv[j];
+        const aS=a.calcEta.getTime(), aE=aS+(SPECS[a.mmsi]||{ops:24}).ops*3600000;
+        const bS=b.calcEta.getTime(), bE=bS+(SPECS[b.mmsi]||{ops:24}).ops*3600000;
+        if (aS<bE && bS<aE) conflicts.push({berth:berth.id, v1:a, v2:b});
+      }
+    }
+  });
+  document.getElementById('k-conf').textContent = conflicts.length;
+  document.getElementById('k-conf-sub').textContent = conflicts.length
+    ? conflicts.map(c=>c.berth).filter((v,i,a)=>a.indexOf(v)===i).join(', ') + ' overlap'
+    : 'ops window overlap';
+  document.getElementById('conflict-pill').classList.toggle('on', conflicts.length>0);
+  conflicts.forEach(c => {
+    const key = `conf_${c.berth}_${[c.v1.mmsi,c.v2.mmsi].sort().join('_')}`;
+    if (!alerted.has(key)) {
+      alerted.add(key);
+      addAlert('conf','Berth '+c.berth+' conflict',
+        c.v1.name.split(' ').pop()+' & '+c.v2.name.split(' ').pop()+' — ops window overlap');
+      toast('warn','⚓ Berth '+c.berth+' Conflict',
+        c.v1.name+' and '+c.v2.name+' have overlapping operations windows.');
+    }
+  });
+}
+
+// ─── Connection ───────────────────────────────────────────────────────────────
+function autoConnect(key) {
+  if (ws && ws.readyState===WebSocket.OPEN) return;
+  if (demoMode) return;
+  if (isConnecting) return;
+  isConnecting = true;
+  clearTimeout(reconnectTimer);
+  setStatus('conn', 'Connecting…');
+  document.getElementById('reconnect-btn').style.display = 'none';
+  showConnOverlay('Connecting to AIS stream…');
+
+  const wsUrl = getWsUrl();
+  console.log('[AIS] Connecting to', wsUrl);
+  ws = new WebSocket(wsUrl);
+  ws.onopen = () => {
+    const sub = buildSubscription(key || getApiKey());
+    ws.send(sub);
+    isConnecting = false;
+    reconnectDelay = 3000;
+    setStatus('live','Live AIS · aisstream.io');
+    // Wait a moment for first data before hiding overlay
+    showConnOverlay('Connected — waiting for vessel positions…');
+    document.getElementById('msg-rate-el').style.display = 'flex';
+    // Hide overlay once first message arrives OR after 8s
+    const hideTimer = setTimeout(hideConnOverlay, 8000);
+    ws._hideTimer = hideTimer;
+    // Warn if still no vessels after 20s
+    setTimeout(() => {
+      if (ws && ws.readyState===WebSocket.OPEN && Object.keys(vessels).length===0) {
+        toast('warn','No vessel data yet',
+          'Connected to aisstream.io but no ships received. Check browser console (F12) for details. Key: …'+getApiKey().slice(-6));
+        console.log('[AIS debug] Connected, 0 vessels after 20s. totalMsgs=', totalMsgsReceived, 'BBOX=', BBOX);
+      }
+    }, 20000);
+  };
+  ws.onmessage = e => {
+    try { onAIS(JSON.parse(e.data)); } catch(_) {}
+  };
+  ws.onerror = () => {
+    isConnecting = false;
+    setStatus('err','Connection error');
+    document.getElementById('reconnect-btn').style.display = '';
+    showConnOverlay('Connection failed — retrying in ' + Math.round(reconnectDelay/1000) + 's…');
+    scheduleReconnect();
+  };
+  ws.onclose = () => {
+    isConnecting = false;
+    if (!demoMode) {
+      setStatus('','Disconnected');
+      document.getElementById('msg-rate-el').style.display = 'none';
+      document.getElementById('reconnect-btn').style.display = '';
+      if (Object.keys(vessels).length === 0) showConnOverlay('Reconnecting…');
+      scheduleReconnect();
+    }
+  };
+}
+
+function scheduleReconnect() {
+  if (demoMode) return;
+  clearTimeout(reconnectTimer);
+  reconnectTimer = setTimeout(() => {
+    reconnectDelay = Math.min(reconnectDelay * 1.6, 45000);
+    autoConnect();
+  }, reconnectDelay);
+}
+
+function doReconnect() {
+  if (ws) { try { ws.close(); } catch(_){} ws = null; }
+  reconnectDelay = 3000;
+  isConnecting = false;
+  clearTimeout(reconnectTimer);
+  autoConnect();
+}
+
+function applyApiKey() {
+  const k = document.getElementById('sp-apikey').value.trim();
+  if (!k) { toast('warn','No key','Please enter an API key.'); return; }
+  localStorage.setItem(LS_KEY, k);
+  if (ws) { try { ws.close(); } catch(_){} ws = null; }
+  isConnecting = false;
+  reconnectDelay = 3000;
+  if (demoMode) stopDemo();
+  autoConnect(k);
+  closeSettings();
+  toast('ok','Key saved','Connecting with new API key…');
+}
+
+// ─── Demo ─────────────────────────────────────────────────────────────────────
+function toggleDemo() { demoMode ? stopDemo() : startDemo(); }
+
+function startDemo() {
+  if (ws) { try { ws.close(); } catch(_){} ws = null; }
+  clearTimeout(reconnectTimer);
+  demoMode=true;
+  document.getElementById('demo-btn').textContent='■ Stop Demo';
+  document.getElementById('demo-btn').className='btn btn-demo active-demo';
+  document.getElementById('demo-pill').classList.add('on');
+  document.getElementById('msg-rate-el').style.display='none';
+  document.getElementById('reconnect-btn').style.display='none';
+  hideConnOverlay();
+  setStatus('demo','Demo · Simulated AIS');
+
+  DEMO_SEED.forEach(s => {
+    const dist    = hav(s.lat,s.lon,PORT.lat,PORT.lon);
+    const calcEta = new Date(Date.now()+(dist/(s.sog*1.852))*3600000);
+    const schedEta = new Date(calcEta.getTime()-s.dev*60000);
+    vessels[s.mmsi] = {
+      mmsi:s.mmsi, name:s.name, svc:s.svc, voy:s.voy, berth:s.berth,
+      lat:s.lat, lon:s.lon, sog:s.sog, cog:bearing(s.lat,s.lon,PORT.lat,PORT.lon),
+      distKm:Math.round(dist), calcEta, schedEta, dev:s.dev,
+      dest:'BEZEE', lastSeen:new Date()
+    };
+    putMarker(s.mmsi);
+    if (Math.abs(s.dev)>=CFG.critMin) fireAlert(s.mmsi);
+  });
+
+  detectConflicts(); renderList(); renderTimeline(); updateKPIs(); updCounters(); updTime();
+  demoTimer = setInterval(tickDemo, 3000);
+  fetchWeather();
+  wxTimer = setInterval(fetchWeather, 120000);
+  toast('info','Demo Mode',''+DEMO_SEED.length+' vessels simulated in North Sea approach to Zeebrugge.');
+}
+
+function stopDemo() {
+  demoMode=false;
+  clearInterval(demoTimer); clearInterval(wxTimer); demoTimer=null; wxTimer=null;
+  document.getElementById('demo-btn').textContent='▶ Demo';
+  document.getElementById('demo-btn').className='btn btn-demo';
+  document.getElementById('demo-pill').classList.remove('on');
+  document.getElementById('conflict-pill').classList.remove('on');
+  Object.values(markers).forEach(m=>m.remove());
+  Object.keys(vesselLabels).forEach(m=>{vesselLabels[m].remove();delete vesselLabels[m];});
+  markers={}; vessels={}; alerted.clear(); conflicts=[];
+  if (approachLine){approachLine.remove();approachLine=null;}
+  selectedMmsi=null;
+  document.getElementById('vdetail').classList.remove('open');
+  renderList(); renderTimeline(); updateKPIs(); updCounters();
+  // Reconnect live
+  reconnectDelay = 3000;
+  isConnecting = false;
+  autoConnect();
+}
+
+function tickDemo() {
+  const DT = 3/3600;
+  Object.values(vessels).forEach(v => {
+    v.cog = bearing(v.lat,v.lon,PORT.lat,PORT.lon) + (Math.random()-.5)*7;
+    const r = v.cog*Math.PI/180, dk = v.sog*1.852*DT;
+    v.lat += (dk/111)*Math.cos(r);
+    v.lon += (dk/(111*Math.cos(v.lat*Math.PI/180)))*Math.sin(r);
+    v.sog  = Math.max(7, Math.min(20, v.sog+(Math.random()-.5)*.4));
+    v.lastSeen = new Date();
+    const dist = hav(v.lat,v.lon,PORT.lat,PORT.lon);
+    v.distKm = Math.round(dist);
+    v.calcEta = new Date(Date.now()+(dist/(v.sog*1.852))*3600000);
+    if (v.schedEta) {
+      v.dev = Math.round((v.calcEta-v.schedEta)/60000);
+      etaHist.push({t:new Date(),dev:v.dev});
+      if (etaHist.length>40) etaHist.shift();
+      if (Math.abs(v.dev)>=CFG.critMin && !alerted.has(v.mmsi)) fireAlert(v.mmsi);
+    }
+    if (dist < 1.2) { resetVessel(v); }
+    putMarker(v.mmsi);
+    if (selectedMmsi===v.mmsi){updateApproachLine(v);renderDetail(v);}
+  });
+  detectConflicts(); updateChart(); scheduleRender();
+}
+
+function resetVessel(v) {
+  const s = DEMO_SEED.find(x=>x.mmsi===v.mmsi);
+  if (!s) return;
+  v.lat=s.lat; v.lon=s.lon; v.sog=s.sog;
+  alerted.delete(v.mmsi);
+  [...alerted].filter(k=>k.includes(v.mmsi)).forEach(k=>alerted.delete(k));
+  const nd=hav(s.lat,s.lon,PORT.lat,PORT.lon);
+  v.calcEta  = new Date(Date.now()+(nd/(s.sog*1.852))*3600000);
+  v.schedEta = new Date(v.calcEta.getTime()-s.dev*60000);
+  v.dev=s.dev; v.distKm=Math.round(nd);
+}
+
+function fireAlert(mmsi) {
+  const v=vessels[mmsi];
+  if (!v) return;
+  alerted.add(mmsi);
+  const sign=v.dev>0?'+':'';
+  const type=Math.abs(v.dev)>=CFG.critMin?'crit':'warn';
+  addAlert(type, v.name, `${sign}${v.dev} min — ${v.svc||''} ${v.voy||''}`.trim());
+  toast(type, (type==='crit'?'⚠ Critical: ':'⚡ Delay: ')+v.name.split(' ').pop(),
+    `ETA deviation ${sign}${v.dev} min · Service ${v.svc||'—'} · Berth ${v.berth||'TBC'}`);
+}
+
+// ─── Live AIS ─────────────────────────────────────────────────────────────────
+function onAIS(msg) {
+  msgCount++;
+  totalMsgsReceived++;
+  if (totalMsgsReceived === 1) {
+    if (ws?._hideTimer) clearTimeout(ws._hideTimer);
+    hideConnOverlay();
+  }
+  // Handle aisstream.io error responses
+  if (msg.error || msg.Error || msg.message || msg.status) {
+    const errTxt = msg.error || msg.Error || msg.message || JSON.stringify(msg);
+    console.warn('[AIS error]', errTxt);
+    setStatus('err', 'AIS error: ' + errTxt.slice(0, 40));
+    document.getElementById('reconnect-btn').style.display = '';
+    toast('warn', 'AIS API Error', errTxt.slice(0, 120));
+    return;
+  }
+  const mmsi=String(msg.MetaData?.MMSI||'');
+  const name=(msg.MetaData?.ShipName||'').trim()||mmsi;
+  const lat=msg.MetaData?.latitude, lon=msg.MetaData?.longitude;
+  if (!mmsi||!lat||!lon) return;
+
+  const mt = msg.MessageType;
+  if (mt==='PositionReport') {
+    const p=msg.Message?.PositionReport;
+    applyVessel(mmsi,{name,lat,lon,sog:p?.Sog||0,cog:p?.Cog||0,lastSeen:new Date()});
+  } else if (mt==='StandardClassBPositionReport') {
+    const p=msg.Message?.StandardClassBPositionReport;
+    applyVessel(mmsi,{name,lat,lon,sog:p?.Sog||0,cog:p?.Cog||0,lastSeen:new Date()});
+  } else if (mt==='ExtendedClassBPositionReport') {
+    const p=msg.Message?.ExtendedClassBPositionReport;
+    applyVessel(mmsi,{name:(p?.Name||'').trim()||name,lat,lon,sog:p?.Sog||0,cog:p?.Cog||0,lastSeen:new Date()});
+  } else if (mt==='ShipStaticData') {
+    const sd=msg.Message?.ShipStaticData;
+    applyVessel(mmsi,{name:(sd?.Name||'').trim()||name,dest:(sd?.Destination||'').trim(),
+      shipType:sd?.Type,lat,lon,lastSeen:new Date()});
+  } else if (lat && lon) {
+    // Catch-all for other message types that have position data
+    applyVessel(mmsi,{name,lat,lon,lastSeen:new Date()});
+  }
+}
+
+function applyVessel(mmsi, data) {
+  const existing = vessels[mmsi];
+  vessels[mmsi] = {...(existing||{}),...data,mmsi};
+  const v = vessels[mmsi];
+
+  if (v.lat && v.lon) {
+    const dist = hav(v.lat, v.lon, PORT.lat, PORT.lon);
+    v.distKm = Math.round(dist);
+    if (v.sog > 0.3) {
+      v.calcEta = new Date(Date.now() + (dist/(v.sog*1.852))*3600000);
+    }
+    // Match against expected arrivals schedule
+    const sched = SCHEDULE[mmsi] || SCHEDULE[v.name];
+    if (sched && !v.schedEta && v.calcEta) {
+      v.schedEta = new Date(v.calcEta.getTime() - sched.dev*60000);
+      v.svc=sched.svc; v.voy=sched.voy; v.berth=sched.berth;
+    }
+    if (v.schedEta && v.calcEta) {
+      v.dev = Math.round((v.calcEta - v.schedEta)/60000);
+      etaHist.push({t:new Date(), dev:v.dev});
+      if (etaHist.length>40) etaHist.shift();
+      if (Math.abs(v.dev)>=CFG.critMin && !alerted.has(mmsi)) fireAlert(mmsi);
+    }
+  }
+
+  // Filter: only keep relevant vessels for CSP Zeebrugge
+  if (!isRelevantVessel(v) && !SPECS[mmsi]) {
+    if (markers[mmsi]) { markers[mmsi].remove(); delete markers[mmsi]; }
+    if (vesselLabels[mmsi]) { vesselLabels[mmsi].remove(); delete vesselLabels[mmsi]; }
+    delete vessels[mmsi];
+    return;
+  }
+
+  // Cap total vessels — drop lowest-scored when over limit
+  const allMmsi = Object.keys(vessels);
+  if (allMmsi.length > MAX_VESSELS) {
+    const sorted = allMmsi.sort((a,b) => vesselRelevanceScore(vessels[a]) - vesselRelevanceScore(vessels[b]));
+    const toDrop = sorted.slice(0, allMmsi.length - MAX_VESSELS);
+    toDrop.forEach(m => {
+      if (markers[m]) { markers[m].remove(); delete markers[m]; }
+      if (vesselLabels[m]) { vesselLabels[m].remove(); delete vesselLabels[m]; }
+      delete vessels[m];
+    });
+  }
+
+  if (vessels[mmsi]) {
+    putMarker(mmsi);
+    if (selectedMmsi === mmsi) renderDetail(vessels[mmsi]);
+  }
+
+  scheduleRender();
+}
+
+// ─── Map markers ──────────────────────────────────────────────────────────────
+function putMarker(mmsi) {
+  const v=vessels[mmsi];
+  if (!v.lat||!v.lon) return;
+  const col=etaCol(v.dev), sel=selectedMmsi===mmsi, sz=sel?16:11;
+  const icon=L.divIcon({
+    html:`<div style="width:${sz}px;height:${Math.round(sz*1.45)}px;background:${col};clip-path:polygon(50% 0%,93% 100%,50% 78%,7% 100%);transform:rotate(${v.cog||0}deg);${sel?`filter:drop-shadow(0 0 5px ${col})`:''}"></div>`,
+    iconSize:[sz,Math.round(sz*1.45)], iconAnchor:[sz/2,Math.round(sz*.72)], className:''
+  });
+  const sp=SPECS[mmsi]||{};
+  const tip=[
+    `<b>${v.name||mmsi}</b>`,
+    `<span style="color:var(--muted)">${(v.sog||0).toFixed(1)} kn · ${v.distKm??'—'} km · Berth ${v.berth||'TBC'}</span>`,
+    sp.teu ? `<span style="color:var(--muted)">${sp.teu.toLocaleString()} TEU · ${sp.loa}m LOA</span>` : '',
+    v.dev!==undefined ? `<span style="color:${col}">${v.dev>0?'+':''}${v.dev} min deviation</span>` : '',
+  ].filter(Boolean).join('<br>');
+  if (markers[mmsi]) {
+    markers[mmsi].setLatLng([v.lat,v.lon]).setIcon(icon);
+    markers[mmsi].getTooltip()?.setContent(tip);
+  } else {
+    markers[mmsi]=L.marker([v.lat,v.lon],{icon})
+      .addTo(map)
+      .bindTooltip(tip,{permanent:false,className:'vtip',direction:'top',offset:[0,-10]})
+      .on('click',()=>selectVessel(mmsi));
+  }
+  updateLabel(mmsi);
+}
+
+function updateApproachLine(v) {
+  if (!approachLine) return;
+  approachLine.setLatLngs([[v.lat,v.lon],[PORT.lat,PORT.lon]]);
+  approachLine.setStyle({color:etaCol(v.dev)});
+}
+
+// ─── Selection ────────────────────────────────────────────────────────────────
+function selectVessel(mmsi) {
+  if (approachLine){approachLine.remove();approachLine=null;}
+  selectedMmsi=mmsi;
+  const v=vessels[mmsi];
+  if (v?.lat) {
+    map.panTo([v.lat,v.lon],{animate:true});
+    approachLine=L.polyline([[v.lat,v.lon],[PORT.lat,PORT.lon]],{
+      color:etaCol(v.dev), weight:1.5, opacity:.45, dashArray:'5,6'
+    }).addTo(map);
+  }
+  Object.keys(markers).forEach(m=>putMarker(m));
+  renderList(); renderDetail(v);
+}
+
+function closeDetail() {
+  if (approachLine){approachLine.remove();approachLine=null;}
+  selectedMmsi=null;
+  document.getElementById('vdetail').classList.remove('open');
+  Object.keys(markers).forEach(m=>putMarker(m));
+  renderList();
+}
+
+function renderDetail(v) {
+  if (!v) return;
+  const sp=SPECS[v.mmsi]||{};
+  const col=etaCol(v.dev), sign=v.dev>0?'+':'';
+  const status=v.dev===undefined?'—':Math.abs(v.dev)<30?'On schedule':v.dev>0?'Running behind':'Running ahead';
+  const conf=conflicts.find(c=>c.v1.mmsi===v.mmsi||c.v2.mmsi===v.mmsi);
+  const impactHtml=conf
+    ? `<div class="impact-row">⚠ Berth ${conf.berth} — ops window conflict with ${(conf.v1.mmsi===v.mmsi?conf.v2:conf.v1).name}</div>`
+    : '';
+  const typeLbl = sp.type || shipTypeName(v.shipType);
+  const hasZee  = ZEE_DESTS.some(d=>((v.dest||'').toUpperCase()).includes(d));
+  const flag = mmsiFlag(v.mmsi);
+  const relETA = fmtRelETA(v.calcEta);
+  const calcETAStr = v.calcEta ? (relETA && relETA!=='—' ? `${fmtTime(v.calcEta)} (${relETA})` : fmtTime(v.calcEta)) : '—';
+  document.getElementById('dinn').innerHTML=`
+    <div class="dhead">
+      <div>
+        <div class="dname">${flag?flag+' ':''} ${v.name||v.mmsi}</div>
+        <div class="dvoy">${
+          v.voy ? `${v.svc||''} · Voyage ${v.voy}` :
+          v.dest ? `Destination: <span style="color:${hasZee?'#3fc05a':'var(--text2)'}">${v.dest.trim()}</span>` :
+          `MMSI: ${v.mmsi}`
+        }</div>
+      </div>
+      <button class="dclose" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="dgrid">
+      ${v.svc?`<div class="dfield"><span class="df-label">Service</span><span class="df-val" style="color:#5aabdb">${v.svc}</span></div>`:''}
+      ${v.berth?`<div class="dfield"><span class="df-label">Berth</span><span class="df-val" style="color:#a07fe0">${v.berth}</span></div>`:''}
+      ${typeLbl?`<div class="dfield"><span class="df-label">Ship Type</span><span class="df-val" style="color:#4ac96a">${typeLbl}</span></div>`:''}
+      <div class="dfield"><span class="df-label">Speed</span><span class="df-val">${v.sog?v.sog.toFixed(1)+' kn':'—'}</span></div>
+      <div class="dfield"><span class="df-label">Course</span><span class="df-val">${v.cog!=null?Math.round(v.cog)+'°':'—'}</span></div>
+      <div class="dfield"><span class="df-label">Distance to port</span><span class="df-val">${v.distKm!=null?v.distKm+' km':'—'}</span></div>
+      <div class="dfield"><span class="df-label">Calc ETA Zeebrugge</span><span class="df-val">${calcETAStr}</span></div>
+      ${v.schedEta?`<div class="dfield"><span class="df-label">Scheduled ETA</span><span class="df-val">${fmtTime(v.schedEta)}</span></div>`:''}
+      ${sp.teu?`<div class="dfield"><span class="df-label">Capacity</span><span class="df-val">${sp.teu.toLocaleString()} TEU</span></div>`:''}
+      ${sp.loa?`<div class="dfield"><span class="df-label">LOA / Draft</span><span class="df-val">${sp.loa} m / ${sp.draft} m</span></div>`:''}
+      ${sp.ops?`<div class="dfield"><span class="df-label">Ops window</span><span class="df-val">~${sp.ops} h</span></div>`:''}
+      ${sp.agent?`<div class="dfield" style="grid-column:1/-1"><span class="df-label">Shipping Agent</span><span class="df-val" style="font-size:.71rem">${sp.agent}</span></div>`:''}
+    </div>
+    <div style="margin-top:.38rem;margin-bottom:.1rem">
+      <a href="https://www.marinetraffic.com/en/ais/details/ships/mmsi:${v.mmsi}" target="_blank" rel="noopener" style="font-size:.67rem;color:var(--accent-hi);text-decoration:none;display:inline-flex;align-items:center;gap:.25rem;opacity:.85">🔗 MarineTraffic</a>
+    </div>
+    ${v.dev!==undefined?`<div class="dev-row"><div><div class="dev-label">ETA Deviation</div><div class="dev-status">${status}</div></div><div class="dev-val" style="color:${col}">${sign}${v.dev} min</div></div>`:''}
+    ${impactHtml}
+  `;
+  document.getElementById('vdetail').classList.add('open');
+}
+
+// ─── Vessel list ──────────────────────────────────────────────────────────────
+let curTypeFilter = 'all';
+
+function setFilter(f, el) {
+  curFilter=f;
+  document.querySelectorAll('#fp-all,#fp-4h,#fp-12h,#fp-appr').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  renderList();
+}
+
+function setTypeFilter(f, el) {
+  curTypeFilter=f;
+  document.querySelectorAll('#ft-all,#ft-cargo,#ft-tank,#ft-zee').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  renderList();
+}
+
+function renderList() {
+  const q = document.getElementById('srch').value.toLowerCase();
+  let rows = Object.values(vessels).filter(v=>v.lat)
+    .sort((a,b)=>(a.distKm||9999)-(b.distKm||9999));
+
+  // Time horizon filter
+  const now = Date.now();
+  if (curFilter==='4h')   rows=rows.filter(v=>v.calcEta && v.calcEta-now<4*3600000 && v.calcEta>now);
+  if (curFilter==='12h')  rows=rows.filter(v=>v.calcEta && v.calcEta-now<12*3600000 && v.calcEta>now);
+  if (curFilter==='appr') rows=rows.filter(v=>v.distKm!=null && v.distKm<25);
+
+  // Type filter
+  if (curTypeFilter==='cargo') rows=rows.filter(v=>v.shipType && v.shipType>=70 && v.shipType<=79);
+  if (curTypeFilter==='tank')  rows=rows.filter(v=>v.shipType && v.shipType>=80 && v.shipType<=89);
+  if (curTypeFilter==='zee')   rows=rows.filter(v=>ZEE_DESTS.some(d=>((v.dest||'').toUpperCase()).includes(d)));
+
+  // Text search
+  if (q) rows=rows.filter(v=>
+    (v.name||'').toLowerCase().includes(q)||
+    (v.svc||'').toLowerCase().includes(q)||
+    (v.voy||'').toLowerCase().includes(q)||
+    (v.berth||'').toLowerCase().includes(q)||
+    (v.dest||'').toLowerCase().includes(q)||
+    (v.mmsi||'').includes(q)
+  );
+
+  const el=document.getElementById('vessel-list');
+  if (!rows.length) {
+    const all = Object.keys(vessels).length;
+    const connected = ws && ws.readyState===WebSocket.OPEN;
+    el.innerHTML=`<div class="placeholder"><div class="ph-ico">🚢</div>
+      <div class="ph-ttl">${all?'No matches':'No vessels yet'}</div>
+      <div class="ph-sub">${all?'Try a different filter':
+        demoMode?'Loading demo…':
+        connected?'Connected — vessels appear when they broadcast AIS in the monitoring zone':
+        'Connecting to aisstream.io…'}</div></div>`;
+    return;
+  }
+  el.innerHTML=rows.map(v=>{
+    const d=v.dev;
+    let bc='',bt='';
+    if(d!==undefined){
+      if(d<-30)       {bc='e-early';bt=d+'m';}
+      else if(d<30)   {bc='e-ok';   bt=d===0?'On Time':(d>0?'+':'')+d+'m';}
+      else if(d<120)  {bc='e-warn'; bt='+'+d+'m';}
+      else if(d<240)  {bc='e-late'; bt='+'+d+'m';}
+      else            {bc='e-crit'; bt='+'+d+'m';}
+    }
+    const stale=v.lastSeen&&(Date.now()-v.lastSeen)>300000;
+    const hasConf=conflicts.some(c=>c.v1.mmsi===v.mmsi||c.v2.mmsi===v.mmsi);
+    const sp=SPECS[v.mmsi]||{};
+    const typeLbl = sp.type || shipTypeName(v.shipType);
+    const destLbl = v.dest && !v.svc ? v.dest.trim().slice(0,10) : '';
+    const hasZee = ZEE_DESTS.some(d=>((v.dest||'').toUpperCase()).includes(d));
+    const isAppr = v.distKm!=null && v.distKm<25;
+    const flag = mmsiFlag(v.mmsi);
+    const relETA = fmtRelETA(v.calcEta);
+    return `<div class="vrow${selectedMmsi===v.mmsi?' sel':''}${stale?' stale':''}" onclick="selectVessel('${v.mmsi}')">
+      <div class="vrow-top">
+        ${flag?`<span class="vrow-flag">${flag}</span>`:''}
+        <span class="vname">${v.name||v.mmsi}</span>
+        ${v.svc?`<span class="tag-svc">${v.svc}</span>`:''}
+        ${v.berth?`<span class="tag-berth">${v.berth}</span>`:''}
+        ${typeLbl?`<span class="tag-type">${typeLbl}</span>`:''}
+        ${isAppr?`<span class="tag-appr">APPR</span>`:''}
+        ${bt?`<span class="etab ${bc}">${bt}</span>`:''}
+        ${hasConf?`<span class="conf-icon" title="Berth conflict">⚓</span>`:''}
+      </div>
+      <div class="vmeta-row">
+        ${v.calcEta&&relETA&&relETA!='—'?`<span class="vmeta" style="color:${isAppr?'#d4a020':etaCol(v.dev)};font-weight:600">⏱ ${relETA}</span>`:''}
+        ${v.calcEta?`<span class="vmeta">${fmtTime(v.calcEta)}</span>`:'<span class="vmeta" style="color:var(--muted)">no ETA</span>'}
+        ${v.distKm!=null?`<span class="vmeta">📍 ${v.distKm} km</span>`:''}
+        <span class="vmeta">⚡ ${(v.sog||0).toFixed(1)} kn</span>
+        ${destLbl&&!v.svc?`<span class="vmeta" style="color:${hasZee?'#3fc05a':'var(--muted)'}">→ ${destLbl}</span>`:''}
+        ${stale?'<span class="vmeta" style="color:var(--yellow)">⚠ stale</span>':''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── KPIs ─────────────────────────────────────────────────────────────────────
+function updateKPIs() {
+  const all   = Object.values(vessels).filter(v=>v.lat);
+  const sched = all.filter(v=>v.dev!==undefined);
+  const onT   = sched.filter(v=>Math.abs(v.dev)<CFG.warnMin);
+  const crits = sched.filter(v=>v.dev>CFG.critMin);
+  const avg   = sched.length ? Math.round(sched.reduce((s,v)=>s+v.dev,0)/sched.length) : null;
+
+  const kotEl=document.getElementById('k-ontime');
+  if (sched.length) {
+    const pct=Math.round(onT.length/sched.length*100);
+    kotEl.textContent=pct+'%';
+    kotEl.className='kpi-val '+(pct>=80?'cv-green':pct>=60?'cv-yellow':'cv-red');
+    document.getElementById('k-ontime-sub').textContent=onT.length+'/'+sched.length+' vessels';
+  } else { kotEl.textContent='—'; kotEl.className='kpi-val cv-muted'; }
+
+  const kavEl=document.getElementById('k-avgdev');
+  if (avg!==null) {
+    kavEl.textContent=(avg>0?'+':'')+avg+'m';
+    kavEl.className='kpi-val '+(Math.abs(avg)<30?'cv-green':Math.abs(avg)<120?'cv-yellow':'cv-red');
+  } else { kavEl.textContent='—'; kavEl.className='kpi-val cv-muted'; }
+
+  document.getElementById('k-crits').textContent=crits.length;
+
+  const appr = all.filter(v=>v.distKm!=null && v.distKm<25);
+  document.getElementById('k-appr').textContent = appr.length;
+  document.getElementById('k-appr').className = 'kpi-val ' + (appr.length>0?'cv-yellow':'cv-muted');
+}
+
+// ─── Weather — real data via Open-Meteo (no API key needed) ──────────────────
+let wxData = { wind:null, wave:null, vis:null };
+
+async function fetchWeather() {
+  try {
+    const [met, mar] = await Promise.all([
+      fetch('https://api.open-meteo.com/v1/forecast?latitude=51.37&longitude=2.89&current=wind_speed_10m,visibility&wind_speed_unit=kn&timezone=Europe%2FBrussels').then(r=>r.json()),
+      fetch('https://marine-api.open-meteo.com/v1/marine?latitude=51.37&longitude=2.89&current=wave_height').then(r=>r.json())
+    ]);
+    if (met.current) {
+      wxData.wind = met.current.wind_speed_10m ?? wxData.wind;
+      wxData.vis  = met.current.visibility != null ? (met.current.visibility/1852).toFixed(0) : wxData.vis;
+    }
+    if (mar.current) {
+      wxData.wave = mar.current.wave_height ?? wxData.wave;
+    }
+    updWeather(true);
+  } catch(_) {
+    // Keep previous values if fetch fails
+    updWeather(false);
+  }
+}
+
+function updWeather(isLive) {
+  document.getElementById('wx-wind').textContent = wxData.wind!=null ? Math.round(wxData.wind) : '—';
+  document.getElementById('wx-wave').textContent = wxData.wave!=null ? Number(wxData.wave).toFixed(1) : '—';
+  document.getElementById('wx-vis').textContent  = wxData.vis!=null  ? wxData.vis : '—';
+  document.getElementById('wx-src').textContent  = isLive
+    ? 'Open-Meteo · '+new Date().toLocaleTimeString('nl-BE',{hour:'2-digit',minute:'2-digit'})
+    : (wxData.wind!=null ? 'Cached data' : 'Weather unavailable');
+}
+
+// ─── Message rate ─────────────────────────────────────────────────────────────
+setInterval(() => {
+  msgRateVal = msgCount * 6; // count per 10s × 6 = per minute
+  msgCount = 0;
+  if (ws && ws.readyState===WebSocket.OPEN) {
+    document.getElementById('msg-rate-n').textContent = msgRateVal;
+  }
+}, 10000);
+
+// ─── Chart ────────────────────────────────────────────────────────────────────
+function initChart() {
+  etaChart = new Chart(document.getElementById('etaChart').getContext('2d'), {
+    type:'line',
+    data:{labels:[],datasets:[{
+      data:[], borderColor:'#1d6fa8', backgroundColor:'rgba(29,111,168,.08)',
+      fill:true, tension:.4, pointRadius:2.5, borderWidth:1.5, pointBackgroundColor:[]
+    }]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw>0?'+':''}${c.raw} min`}}},
+      scales:{
+        x:{ticks:{color:'#4f6d88',font:{size:9},maxTicksLimit:5},grid:{color:'rgba(26,45,68,.5)'}},
+        y:{ticks:{color:'#4f6d88',font:{size:9},callback:v=>`${v>0?'+':''}${v}m`},grid:{color:'rgba(26,45,68,.5)'}}
+      }
+    }
+  });
+}
+function updateChart() {
+  if (!etaChart||!etaHist.length) return;
+  etaChart.data.labels = etaHist.map(p=>fmtTimeSec(p.t));
+  etaChart.data.datasets[0].data = etaHist.map(p=>p.dev);
+  etaChart.data.datasets[0].pointBackgroundColor = etaHist.map(p=>Math.abs(p.dev)<30?'#27a448':Math.abs(p.dev)<120?'#c48a0a':'#b83232');
+  etaChart.update('none');
+}
+
+// ─── Alerts ───────────────────────────────────────────────────────────────────
+function addAlert(type, name, msg) {
+  alertLog.unshift({type,name,msg,t:new Date()});
+  if (alertLog.length>30) alertLog.pop();
+  renderAlerts();
+  document.getElementById('alert-ct').textContent=alertLog.length;
+}
+function renderAlerts() {
+  const el=document.getElementById('alerts-list');
+  if (!alertLog.length){el.innerHTML='<div class="placeholder" style="padding:.5rem"><span style="font-size:.64rem;color:var(--muted)">No active alerts</span></div>';return;}
+  el.innerHTML=alertLog.map(a=>`<div class="alert-row"><div class="adot ${a.type}"></div><div class="atext"><b>${a.name}</b> — ${a.msg}</div><div class="atime">${fmtTime(a.t)}</div></div>`).join('');
+}
+
+// ─── Toasts ───────────────────────────────────────────────────────────────────
+function toast(type, title, msg, ms=6500) {
+  const icons={crit:'🚨',warn:'⚠️',ok:'✓',info:'ℹ'};
+  const el=document.createElement('div');
+  el.className=`toast ${type}`;
+  el.innerHTML=`<div class="t-ico">${icons[type]||'ℹ'}</div><div><div class="t-ttl">${title}</div><div class="t-msg">${msg}</div></div>`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>el.remove(), ms);
+}
+
+// ─── Settings ─────────────────────────────────────────────────────────────────
+function openSettings() {
+  document.getElementById('sp-apikey').value = getApiKey();
+  document.getElementById('settings-panel').classList.add('on');
+  document.getElementById('settings-overlay').classList.add('on');
+}
+function closeSettings() {
+  document.getElementById('settings-panel').classList.remove('on');
+  document.getElementById('settings-overlay').classList.remove('on');
+}
+function applySettings() {
+  CFG.warnMin=parseInt(document.getElementById('sp-warn').value)||30;
+  CFG.critMin=parseInt(document.getElementById('sp-crit').value)||120;
+  alerted.clear(); conflicts=[];
+  Object.values(vessels).forEach(v=>{ if(v.dev!==undefined&&Math.abs(v.dev)>=CFG.critMin) fireAlert(v.mmsi); });
+  closeSettings();
+  toast('ok','Settings applied','Warning >'+CFG.warnMin+' min · Critical >'+CFG.critMin+' min');
+}
+
+// ─── Overlay helpers ──────────────────────────────────────────────────────────
+function showConnOverlay(msg) {
+  const o=document.getElementById('conn-overlay');
+  o.style.display='flex';
+  o.style.opacity='1';
+  o.classList.remove('hidden');
+  document.getElementById('conn-overlay-label').textContent=msg;
+}
+function hideConnOverlay() {
+  const o=document.getElementById('conn-overlay');
+  o.style.opacity='0';
+  setTimeout(()=>{ o.style.display='none'; o.classList.add('hidden'); }, 400);
+}
+
+// ─── Print report ─────────────────────────────────────────────────────────────
+function printReport() {
+  const now=new Date();
+  const hr=now.getHours();
+  const term=document.getElementById('sp-term').value||'CSP Zeebrugge';
+  const shift=hr>=6&&hr<14?'Early Shift  06:00–14:00':hr>=14&&hr<22?'Late Shift  14:00–22:00':'Night Shift  22:00–06:00';
+  document.getElementById('pr-meta').innerHTML=
+    `Terminal: ${term}<br>Date: ${now.toLocaleDateString('nl-BE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}<br>Shift: ${shift}<br>Printed: ${now.toLocaleTimeString('nl-BE',{hour:'2-digit',minute:'2-digit'})}`;
+  document.getElementById('pr-gen').textContent=now.toLocaleString('nl-BE');
+  const rows=Object.values(vessels).filter(v=>v.lat).sort((a,b)=>(a.distKm||999)-(b.distKm||999));
+  document.getElementById('pr-tbody').innerHTML=rows.map(v=>{
+    const d=v.dev;
+    const status=d===undefined?'—':Math.abs(d)<30?'On Time':d>0?`+${d} min late`:`${Math.abs(d)} min early`;
+    return `<tr><td>${v.name||v.mmsi}</td><td>${v.svc||'—'}</td><td>${v.voy||'—'}</td><td>${v.berth||'TBC'}</td><td>${v.schedEta?fmtTime(v.schedEta):'—'}</td><td>${v.calcEta?fmtTime(v.calcEta):'—'}</td><td>${d!==undefined?(d>0?'+':'')+d+' min':'—'}</td><td>${status}</td></tr>`;
+  }).join('');
+  document.getElementById('pr-alerts-body').innerHTML=alertLog.length
+    ? alertLog.map(a=>`<div class="pr-alert-item">${fmtTime(a.t)} — <b>${a.name}</b>: ${a.msg}</div>`).join('')
+    : '<p style="color:#888;font-size:.72rem">No active alerts at time of printing</p>';
+  document.getElementById('pr-conf-body').innerHTML=conflicts.length
+    ? conflicts.map(c=>`<div class="pr-alert-item"><b>Berth ${c.berth}</b>: ${c.v1.name} and ${c.v2.name} — operations windows overlap</div>`).join('')
+    : '<p style="color:#888;font-size:.72rem">No berth conflicts detected</p>';
+  window.print();
+}
+
+// ─── CSV export ───────────────────────────────────────────────────────────────
+function doExport() {
+  const hdr=['Vessel','MMSI','Service','Voyage','Berth','Speed_kn','Dist_km','Calc_ETA','Sched_ETA','Dev_min','TEU','LOA_m','Draft_m','Agent','Lat','Lon'];
+  const rows=Object.values(vessels).filter(v=>v.lat).map(v=>{
+    const sp=SPECS[v.mmsi]||{};
+    return [v.name||'',v.mmsi||'',v.svc||'',v.voy||'',v.berth||'',(v.sog||0).toFixed(1),v.distKm||'',
+      v.calcEta?.toISOString()||'',v.schedEta?.toISOString()||'',v.dev??'',
+      sp.teu||'',sp.loa||'',sp.draft||'',sp.agent||'',v.lat?.toFixed(5),v.lon?.toFixed(5)];
+  });
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([[hdr,...rows].map(r=>r.join(',')).join('\n')],{type:'text/csv'}));
+  a.download=`csp-vessel-eta-${new Date().toISOString().slice(0,16).replace('T','-')}.csv`;
+  a.click();
+}
+
+// ─── Flag emoji from MMSI prefix ─────────────────────────────────────────────
+function mmsiFlag(mmsi) {
+  const p = String(mmsi).slice(0,3);
+  const m = {
+    '205':'🇧🇪','206':'🇧🇪','211':'🇩🇪','212':'🇩🇪','244':'🇳🇱','245':'🇳🇱','246':'🇳🇱',
+    '232':'🇬🇧','233':'🇬🇧','235':'🇬🇧','247':'🇮🇹','248':'🇲🇹','255':'🇵🇹','258':'🇳🇴',
+    '259':'🇳🇴','265':'🇸🇪','266':'🇸🇪','219':'🇩🇰','230':'🇫🇮','477':'🇭🇰','525':'🇮🇩',
+    '563':'🇸🇬','338':'🇺🇸','371':'🇵🇦','372':'🇵🇦','374':'🇵🇦','376':'🇵🇦','319':'🇰🇾',
+    '273':'🇷🇺','416':'🇹🇼'
+  };
+  return m[p] || '';
+}
+
+// ─── Relative ETA formatter ───────────────────────────────────────────────────
+function fmtRelETA(date) {
+  if (!date) return '—';
+  const diff = date - Date.now();
+  if (diff <= 0) return 'arrived';
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  if (h === 0) return 'in ' + m + 'm';
+  return 'in ' + h + 'h ' + (m > 0 ? m + 'm' : '');
+}
+
+// ─── Next Arrival KPI ─────────────────────────────────────────────────────────
+function updateNextArrivalKPI() {
+  const now = Date.now();
+  const future = Object.values(vessels).filter(v=>v.calcEta && v.calcEta>now && v.lat);
+  if (!future.length) {
+    document.getElementById('k-next-rel').textContent = '—';
+    document.getElementById('k-next-name').textContent = '—';
+    return;
+  }
+  future.sort((a,b)=>a.calcEta-b.calcEta);
+  const next = future[0];
+  const rel = fmtRelETA(next.calcEta);
+  const diff = next.calcEta - now;
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const shortRel = h === 0 ? m + 'm' : h + 'h ' + (m > 0 ? m + 'm' : '');
+  document.getElementById('k-next-rel').textContent = shortRel;
+  const shortName = (next.name || next.mmsi).slice(0, 12);
+  document.getElementById('k-next-name').textContent = shortName;
+}
+
+// ─── Vessel name labels on map ────────────────────────────────────────────────
+function updateLabel(mmsi) {
+  const v = vessels[mmsi];
+  if (!v || !v.lat || !v.lon) return;
+  const zoom = map.getZoom();
+  if (zoom >= 9) {
+    const shortName = (v.name||mmsi).split(' ').slice(-1)[0]; // last word
+    const labelIcon = L.divIcon({
+      html: `<div style="background:rgba(9,14,23,.82);color:#9ab5cc;padding:1px 5px;border-radius:3px;font-size:9px;font-weight:600;white-space:nowrap;border:1px solid rgba(26,45,68,.8);pointer-events:none">${shortName}</div>`,
+      iconAnchor: [-4, 8], className: ''
+    });
+    if (vesselLabels[mmsi]) {
+      vesselLabels[mmsi].setLatLng([v.lat, v.lon]).setIcon(labelIcon);
+    } else {
+      vesselLabels[mmsi] = L.marker([v.lat, v.lon], {icon: labelIcon, interactive: false}).addTo(map);
+    }
+  } else {
+    if (vesselLabels[mmsi]) { vesselLabels[mmsi].remove(); delete vesselLabels[mmsi]; }
+  }
+}
+
+// ─── Utilities ────────────────────────────────────────────────────────────────
+function hav(la1,lo1,la2,lo2){const R=6371,dL=(la2-la1)*Math.PI/180,dO=(lo2-lo1)*Math.PI/180,a=Math.sin(dL/2)**2+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dO/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
+function bearing(la1,lo1,la2,lo2){const d=(lo2-lo1)*Math.PI/180,a=la1*Math.PI/180,b=la2*Math.PI/180;return((Math.atan2(Math.sin(d)*Math.cos(b),Math.cos(a)*Math.sin(b)-Math.sin(a)*Math.cos(b)*Math.cos(d))*180/Math.PI)+360)%360;}
+function etaCol(d){if(d===undefined)return'#4f6d88';if(d<30)return'#27a448';if(d<120)return'#c48a0a';if(d<240)return'#c95c1a';return'#b83232';}
+function fmtTime(d){return d?.toLocaleTimeString('nl-BE',{hour:'2-digit',minute:'2-digit'})||'—';}
+function fmtTimeSec(d){return d?.toLocaleTimeString('nl-BE',{hour:'2-digit',minute:'2-digit',second:'2-digit'})||'—';}
+
+function setStatus(cls, txt) {
+  const dot=document.getElementById('sdot');
+  const pill=document.getElementById('status-pill');
+  const stext=document.getElementById('stext');
+  dot.className='sdot '+cls;
+  stext.textContent=txt;
+  pill.className='status-pill '+(cls==='live'?'live':cls==='demo'?'demo-s':cls==='err'?'err':'');
+}
+
+function updCounters() {
+  const n=Object.values(vessels).filter(v=>v.lat).length;
+  document.getElementById('live-ct').textContent=n+' live';
+  document.getElementById('h-vn').textContent=n;
+}
+function updTime() {
+  document.getElementById('k-upd').textContent=fmtTimeSec(new Date());
+  document.getElementById('k-feed').textContent=demoMode?'Simulated AIS':
+    (ws&&ws.readyState===WebSocket.OPEN?'Live AIS · aisstream.io':'Reconnecting…');
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  initMap();
+  initChart();
+  initTimeline();
+  window.addEventListener('resize', () => { if(Object.keys(vessels).length) renderTimeline(); });
+
+  // Start weather immediately
+  fetchWeather();
+  setInterval(fetchWeather, 120000);
+
+  // Auto-connect to live AIS feed
+  autoConnect();
+
+  // Live clock — update every second
+  setInterval(() => { document.getElementById('k-upd').textContent = fmtTimeSec(new Date()); }, 1000);
+
+  // Periodic clock/timeline refresh
+  setInterval(() => {
+    updTime();
+    if (Object.keys(vessels).length) renderTimeline();
+    updateNextArrivalKPI();
+  }, 15000);
+
+  // Remove stale vessels (no update in 12 min)
+  setInterval(() => {
+    const cutoff = Date.now() - 12 * 60000;
+    Object.keys(vessels).forEach(mmsi => {
+      const v = vessels[mmsi];
+      if (v.lastSeen && v.lastSeen.getTime() < cutoff) {
+        if (markers[mmsi]) { markers[mmsi].remove(); delete markers[mmsi]; }
+        if (vesselLabels[mmsi]) { vesselLabels[mmsi].remove(); delete vesselLabels[mmsi]; }
+        if (selectedMmsi === mmsi) closeDetail();
+        delete vessels[mmsi];
+      }
+    });
+    scheduleRender();
+  }, 120000);
+});
+</script>
+</body>
+</html>

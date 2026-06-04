@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Port Container Tracker — CSP Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="header-brand">
+        <span class="logo">⚓</span>
+        <div>
+          <h1>Port Container Tracker</h1>
+          <p class="subtitle">Terminal Operations Intelligence Dashboard</p>
+        </div>
+      </div>
+      <div class="header-meta">
+        <span id="live-clock"></span>
+        <span class="badge-live">● LIVE</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- KPI Cards -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-label">TEU Throughput (today)</span>
+        <span class="kpi-value" id="teu-count">—</span>
+        <span class="kpi-delta positive">▲ 4.2% vs yesterday</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Vessels in port</span>
+        <span class="kpi-value" id="vessel-count">—</span>
+        <span class="kpi-delta">3 arriving in 6h</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Avg dwell time</span>
+        <span class="kpi-value" id="dwell-time">—</span>
+        <span class="kpi-delta negative">▼ 0.3 days target miss</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Gate transactions</span>
+        <span class="kpi-value" id="gate-count">—</span>
+        <span class="kpi-delta positive">▲ On schedule</span>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="charts-grid">
+      <div class="chart-card wide">
+        <h2>Weekly TEU Throughput</h2>
+        <canvas id="throughputChart" height="100"></canvas>
+      </div>
+      <div class="chart-card">
+        <h2>Yard Occupancy by Block</h2>
+        <canvas id="occupancyChart" height="160"></canvas>
+      </div>
+      <div class="chart-card">
+        <h2>Vessel Turnaround (hrs)</h2>
+        <canvas id="turnaroundChart" height="160"></canvas>
+      </div>
+    </section>
+
+    <!-- Container alerts table -->
+    <section class="alerts-section">
+      <h2>⚠ Dwell Time Alerts — Containers exceeding SLA</h2>
+      <table id="alerts-table">
+        <thead>
+          <tr>
+            <th>Container ID</th>
+            <th>Size</th>
+            <th>Location</th>
+            <th>Arrival</th>
+            <th>Dwell (days)</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="alerts-body"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: shipment-sql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Dev@12345!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Dev@12345!" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: src/WebAPI/Dockerfile
+    container_name: shipment-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sql;Database=ShipmentDb;User Id=sa;Password=Dev@12345!;TrustServerCertificate=true
+    ports:
+      - "5001:8080"
+    depends_on:
+      sql:
+        condition: service_healthy
+
+volumes:
+  sqldata:

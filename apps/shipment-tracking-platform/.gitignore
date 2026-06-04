@@ -1,0 +1,45 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+*.swp
+
+## Publisheer output
+publish/
+out/
+
+## NuGet
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+
+## Test resultaten
+TestResults/
+coverage/
+*.trx
+*.coveragexml
+
+## Secrets — nooit committen!
+appsettings.Production.json
+**/secrets.json
+*.pfx
+*.p12
+
+## Logs
+logs/
+*.log
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Rider / IntelliJ
+.idea/
+*.iml
+
+## Docker
+docker-compose.override.yml
