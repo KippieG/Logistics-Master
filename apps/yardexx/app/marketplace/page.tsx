@@ -15,6 +15,7 @@ const PER_PAGE = 12;
 interface SP {
   type?: string; region?: string; side?: string;
   sort?: string; minVol?: string; maxVol?: string; maxPrice?: string; page?: string;
+  sublet?: string; green?: string;
 }
 
 export const dynamic = "force-dynamic";
@@ -35,6 +36,8 @@ export default async function MarketplacePage({ searchParams }: { searchParams: 
     };
   }
   if (params.maxPrice) where.pricePerM2PerDay = { lte: Number(params.maxPrice) };
+  if (params.sublet === "true") where.isSublet = true;
+  if (params.green === "true") where.isGreen = true;
 
   const sortMap: Record<string, Prisma.ListingOrderByWithRelationInput> = {
     newest: { createdAt: "desc" },
@@ -56,12 +59,13 @@ export default async function MarketplacePage({ searchParams }: { searchParams: 
         id: true, side: true, capacityType: true, region: true,
         volumeM2: true, pricePerM2PerDay: true,
         availableFrom: true, availableTo: true, description: true, createdAt: true,
+        isSublet: true, isGreen: true, certifications: true,
       },
     }),
   ]);
 
   const totalPages = Math.ceil(total / PER_PAGE);
-  const hasFilter = !!(params.type || params.region || params.side || params.minVol || params.maxVol || params.maxPrice);
+  const hasFilter = !!(params.type || params.region || params.side || params.minVol || params.maxVol || params.maxPrice || params.sublet || params.green);
 
   function url(extra: Record<string, string | undefined>) {
     const p = new URLSearchParams();
@@ -70,7 +74,7 @@ export default async function MarketplacePage({ searchParams }: { searchParams: 
     return `/marketplace?${p}`;
   }
 
-  const types: CapacityType[] = ["container", "roro", "dry_bulk", "tank", "cold_storage"];
+  const types: CapacityType[] = ["container", "roro", "warehouse", "truck_parking", "cold_storage", "ev_storage", "dry_bulk", "tank"];
 
   return (
     <div style={{ minHeight: "calc(100vh - 64px)", background: "#f4f6f9", fontFamily: "system-ui, sans-serif" }}>
@@ -78,9 +82,9 @@ export default async function MarketplacePage({ searchParams }: { searchParams: 
       <div style={{ background: "#0a1628", padding: "2rem 5% 1.5rem" }}>
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", marginBottom: "1.25rem" }}>
           <div>
-            <h1 style={{ color: "#fff", fontSize: "1.75rem", fontWeight: 800, letterSpacing: "-1px", margin: 0 }}>Marketplace</h1>
+            <h1 style={{ color: "#fff", fontSize: "1.75rem", fontWeight: 800, letterSpacing: "-1px", margin: 0 }}>Capacity Exchange</h1>
             <p style={{ color: "rgba(255,255,255,.45)", fontSize: ".88rem", margin: ".25rem 0 0" }}>
-              {total} listing{total !== 1 ? "s" : ""}{hasFilter ? " (gefilterd)" : ""} · identiteit verborgen tot deal
+              {total} order{total !== 1 ? "s" : ""}{hasFilter ? " (gefilterd)" : ""} · vraag en aanbod anoniem gematcht
             </p>
           </div>
           {session && (
@@ -146,7 +150,22 @@ export default async function MarketplacePage({ searchParams }: { searchParams: 
                 const days = Math.max(1, Math.ceil((new Date(listing.availableTo).getTime() - new Date(listing.availableFrom).getTime()) / 86400000));
                 return (
                   <Link key={listing.id} href={`/listings/${listing.id}`} style={{ textDecoration: "none" }}>
-                    <div style={{ background: "#fff", borderRadius: "16px", padding: "1.5rem", border: "1px solid #e8edf4", height: "100%", display: "flex", flexDirection: "column" }}>
+                    <div style={{ background: "#fff", borderRadius: "16px", padding: "1.5rem", border: "1px solid #e8edf4", height: "100%", display: "flex", flexDirection: "column", position: "relative" }}>
+                      
+                      {/* Sublet / Green Badges */}
+                      <div style={{ position: "absolute", top: "1rem", right: "1rem", display: "flex", gap: ".4rem" }}>
+                        {listing.isSublet && (
+                          <span title="Secondary Market / Sublet" style={{ background: "#e0f2fe", color: "#0369a1", padding: ".2rem .5rem", borderRadius: "6px", fontSize: ".65rem", fontWeight: 800, textTransform: "uppercase" }}>
+                            Sublet
+                          </span>
+                        )}
+                        {listing.isGreen && (
+                          <span title="Sustainability Label / Green Terminal" style={{ background: "#dcfce7", color: "#15803d", padding: ".2rem .5rem", borderRadius: "6px", fontSize: ".65rem", fontWeight: 800, textTransform: "uppercase" }}>
+                            🌿 Green
+                          </span>
+                        )}
+                      </div>
+
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: ".6rem" }}>
                           <span style={{ fontSize: "1.5rem" }}>{CAPACITY_TYPE_ICONS[listing.capacityType as CapacityType]}</span>
@@ -155,10 +174,11 @@ export default async function MarketplacePage({ searchParams }: { searchParams: 
                             <p style={{ fontSize: ".78rem", color: "#8a96a8", margin: 0 }}>{REGION_FLAG[listing.region as Region]} {REGION_LABELS[listing.region as Region]}</p>
                           </div>
                         </div>
-                        <span style={{ padding: ".22rem .55rem", borderRadius: "6px", fontSize: ".72rem", fontWeight: 700, background: listing.side === "offer" ? "rgba(0,201,167,.1)" : "rgba(59,130,246,.1)", color: listing.side === "offer" ? "#009e84" : "#3b82f6" }}>
+                        <span style={{ padding: ".22rem .55rem", borderRadius: "6px", fontSize: ".72rem", fontWeight: 700, background: listing.side === "offer" ? "rgba(0,201,167,.1)" : "rgba(59,130,246,.1)", color: listing.side === "offer" ? "#009e84" : "#3b82f6", marginRight: (listing.isSublet || listing.isGreen) ? "4rem" : "0" }}>
                           {listing.side === "offer" ? "Aanbod" : "Vraag"}
                         </span>
                       </div>
+
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".6rem", marginBottom: ".85rem" }}>
                         {[{ l: "Volume", v: `${listing.volumeM2.toLocaleString("nl-BE")} m²` }, { l: "Prijs", v: `€${listing.pricePerM2PerDay}/m²/dag` }].map(({ l, v }) => (
                           <div key={l} style={{ background: "#f4f6f9", borderRadius: "8px", padding: ".6rem .75rem" }}>
@@ -167,14 +187,29 @@ export default async function MarketplacePage({ searchParams }: { searchParams: 
                           </div>
                         ))}
                       </div>
+
                       <p style={{ fontSize: ".78rem", color: "#4a5568", margin: "0 0 .75rem" }}>
                         📅 {new Date(listing.availableFrom).toLocaleDateString("nl-BE", { day: "numeric", month: "short" })} → {new Date(listing.availableTo).toLocaleDateString("nl-BE", { day: "numeric", month: "short" })} ({days}d)
                       </p>
-                      {listing.description && (
-                        <p style={{ fontSize: ".8rem", color: "#4a5568", lineHeight: 1.5, margin: "0 0 .75rem", flex: 1 }}>
-                          {listing.description.length > 80 ? listing.description.slice(0, 80) + "..." : listing.description}
-                        </p>
-                      )}
+
+                      {/* Description & Certifications */}
+                      <div style={{ flex: 1 }}>
+                        {listing.description && (
+                          <p style={{ fontSize: ".8rem", color: "#4a5568", lineHeight: 1.5, margin: "0 0 .75rem" }}>
+                            {listing.description.length > 80 ? listing.description.slice(0, 80) + "..." : listing.description}
+                          </p>
+                        )}
+                        {listing.certifications.length > 0 && (
+                          <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap", marginBottom: ".75rem" }}>
+                            {listing.certifications.map(cert => (
+                              <span key={cert} style={{ background: "#f1f5f9", color: "#64748b", padding: ".15rem .4rem", borderRadius: "4px", fontSize: ".65rem", fontWeight: 600, border: "1px solid #e2e8f0" }}>
+                                {cert}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
                       <div style={{ marginTop: "auto", padding: ".45rem .75rem", background: "rgba(0,201,167,.06)", borderRadius: "7px", fontSize: ".72rem", color: "#009e84", fontWeight: 600 }}>
                         🔒 Anoniem tot deal bevestigd
                       </div>

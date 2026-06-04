@@ -12,6 +12,9 @@ enum CapacityType {
   dry_bulk
   tank
   cold_storage
+  ev_storage
+  truck_parking
+  warehouse
 }
 
 enum Region {
@@ -107,6 +110,13 @@ model Listing {
   availableTo      DateTime
   status           ListingStatus @default(active)
   description      String?
+  
+  // Strategic depth features
+  isSublet         Boolean       @default(false)
+  isGreen          Boolean       @default(false)
+  certifications   String[]
+  securityLevel    Int           @default(1)
+  
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 

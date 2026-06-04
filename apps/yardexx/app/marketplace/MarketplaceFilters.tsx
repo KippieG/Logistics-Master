@@ -53,6 +53,22 @@ export default function MarketplaceFilters() {
         onBlur={(e) => update("maxPrice", e.target.value)}
         style={{ width: "80px", padding: ".38rem .6rem", borderRadius: "7px", background: "rgba(255,255,255,.08)", color: "#fff", border: "1px solid rgba(255,255,255,.15)", fontSize: ".75rem", fontFamily: "inherit", outline: "none" }}
       />
+
+      <div style={{ width: "1px", height: "20px", background: "rgba(255,255,255,.1)", margin: "0 .25rem" }} />
+
+      {/* Strategic Toggles */}
+      <button
+        onClick={() => update("sublet", params.get("sublet") === "true" ? "" : "true")}
+        style={{ padding: ".35rem .75rem", borderRadius: "7px", fontSize: ".72rem", fontWeight: 700, cursor: "pointer", border: "1px solid rgba(255,255,255,.15)", background: params.get("sublet") === "true" ? "#0369a1" : "rgba(255,255,255,.05)", color: params.get("sublet") === "true" ? "#fff" : "rgba(255,255,255,.6)" }}
+      >
+        Sublet Market
+      </button>
+      <button
+        onClick={() => update("green", params.get("green") === "true" ? "" : "true")}
+        style={{ padding: ".35rem .75rem", borderRadius: "7px", fontSize: ".72rem", fontWeight: 700, cursor: "pointer", border: "1px solid rgba(255,255,255,.15)", background: params.get("green") === "true" ? "#15803d" : "rgba(255,255,255,.05)", color: params.get("green") === "true" ? "#fff" : "rgba(255,255,255,.6)" }}
+      >
+        🌿 Green Terminal
+      </button>
     </div>
   );
 }

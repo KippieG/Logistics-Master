@@ -1,4 +1,4 @@
-export type CapacityType = "container" | "roro" | "dry_bulk" | "tank" | "cold_storage";
+export type CapacityType = "container" | "roro" | "dry_bulk" | "tank" | "cold_storage" | "ev_storage" | "truck_parking" | "warehouse";
 export type ListingSide = "offer" | "demand";
 export type ListingStatus = "active" | "matched" | "closed" | "expired";
 export type MatchStatus = "pending" | "accepted" | "rejected" | "cancelled";
@@ -8,11 +8,14 @@ export type Region =
   | "hamburg" | "le_havre";
 
 export const CAPACITY_TYPE_LABELS: Record<CapacityType, string> = {
-  container: "Containerterminal",
-  roro: "RoRo Terminal",
+  container: "Container yard",
+  roro: "Automotive / RoRo",
   dry_bulk: "Droge Bulk",
   tank: "Tank Terminal",
-  cold_storage: "Koelopslagterminal",
+  cold_storage: "Reefer / Koeling",
+  ev_storage: "EV / Battery Safe",
+  truck_parking: "Truck Parking",
+  warehouse: "Warehouse",
 };
 
 export const CAPACITY_TYPE_ICONS: Record<CapacityType, string> = {
@@ -21,6 +24,9 @@ export const CAPACITY_TYPE_ICONS: Record<CapacityType, string> = {
   dry_bulk: "⛵",
   tank: "🛢️",
   cold_storage: "❄️",
+  ev_storage: "⚡",
+  truck_parking: "🚛",
+  warehouse: "🏭",
 };
 
 export const REGION_LABELS: Record<Region, string> = {
