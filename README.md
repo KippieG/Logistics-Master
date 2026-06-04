@@ -54,6 +54,24 @@ Welkom bij het absolute zenuwcentrum van logistieke innovatie. Deze "Master" rep
 
 ---
 
+## 📚 Knowledge (Guides & Frameworks)
+*Educatieve content en persoonlijke kennisbank over enterprise systemen.*
+
+- **`knowledge/enterprise-stack`**  
+  De complete gids voor enterprise software development. Van .NET & Angular tot ERP integraties (Business Central) en WMS/TMS systemen.
+
+---
+
+## 🧪 Labs (Experimental Tools)
+*Innovatieve experimenten en developer utilities.*
+
+- **`labs/git-profiler`**  
+  AI-powered analyse van GitHub commit history om de "genetic code" van een developer te ontrafelen.
+- **`labs/localmind`**  
+  Local AI Assistant Dashboard voor het beheren van private LLM modellen.
+
+---
+
 ## 📊 Intelligence (Market Insights)
 *Data-gedreven onderzoek naar de haven van Zeebrugge.*
 
