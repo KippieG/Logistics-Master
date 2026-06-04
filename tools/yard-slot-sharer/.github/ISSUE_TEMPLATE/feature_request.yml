@@ -1,0 +1,56 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping shape YardEx. Please describe your idea below.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Marketplace / Listings
+        - Requests & Deals flow
+        - Notifications
+        - Dashboard & Analytics
+        - Authentication & Security
+        - API / Integrations (TOS, Navis N4)
+        - Payments (Stripe)
+        - Multi-port expansion
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      placeholder: "As a terminal operator, I can't filter listings by date range, so I have to scroll through all listings to find one that fits my window."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      placeholder: "Add date-range pickers to the marketplace filter bar."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: Any other approaches you thought of?
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: willing
+    attributes:
+      label: Contribution
+      options:
+        - label: I'm willing to open a PR for this feature

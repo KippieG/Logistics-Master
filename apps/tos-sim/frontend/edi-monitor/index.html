@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDI Message Monitor – TOS Simulation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;color:#1a1a1a;background:#f5f5f3;min-height:100vh}
+.topbar{background:#fff;border-bottom:1px solid #e5e5e3;padding:12px 24px;display:flex;align-items:center;gap:12px}
+.topbar h1{font-size:17px;font-weight:500}
+.badge-live{background:#e1f5ee;color:#0f6e56;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.main{padding:20px 24px;max-width:1100px;margin:0 auto}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.stat{background:#fff;border:1px solid #e5e5e3;border-radius:10px;padding:12px 16px;text-align:center}
+.stat-n{font-size:24px;font-weight:500}
+.stat-l{font-size:11px;color:#888;margin-top:3px}
+.grid{display:grid;grid-template-columns:340px 1fr;gap:16px}
+.panel{background:#fff;border:1px solid #e5e5e3;border-radius:10px;overflow:hidden}
+.panel-header{padding:10px 16px;border-bottom:1px solid #e5e5e3;display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-size:12px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.5px}
+.panel-body{padding:14px}
+textarea{width:100%;height:200px;border:1px solid #ddd;border-radius:8px;padding:10px;font-family:'Courier New',monospace;font-size:12px;resize:vertical;background:#fafafa;color:#1a1a1a;line-height:1.6}
+textarea:focus{outline:none;border-color:#378add}
+.btn-row{display:flex;gap:8px;margin-top:10px}
+button{padding:7px 16px;border-radius:8px;border:1px solid #ddd;background:#fff;color:#1a1a1a;cursor:pointer;font-size:13px;font-weight:500}
+button:hover{background:#f5f5f5}
+button.primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+button.primary:hover{background:#333}
+select{padding:6px 10px;border:1px solid #ddd;border-radius:8px;background:#fafafa;color:#1a1a1a;font-size:13px;width:100%;margin-bottom:8px}
+.msg-list{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto}
+.msg-item{border-radius:8px;padding:9px 12px;border:1px solid #e5e5e3;cursor:pointer}
+.msg-item:hover{border-color:#999}
+.msg-item.active{border-color:#378add;background:#f0f7ff}
+.msg-meta{display:flex;align-items:center;justify-content:space-between}
+.msg-type{font-size:12px;font-weight:500;font-family:monospace}
+.msg-time{font-size:11px;color:#aaa}
+.msg-vessel{font-size:12px;color:#666;margin-top:2px}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px}
+.ok{background:#1D9E75}.warn{background:#BA7517}.err{background:#E24B4A}
+.result-area{font-family:'Courier New',monospace;font-size:12px;line-height:1.9;white-space:pre-wrap;max-height:200px;overflow-y:auto;margin-bottom:12px}
+.seg-ok{color:#0f6e56}.seg-warn{color:#854F0B}.seg-err{color:#A32D2D}.seg-info{color:#555}
+.vessel-box{background:#f5f5f3;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px}
+.vessel-box table{width:100%;border-collapse:collapse}
+.vessel-box td{padding:3px 0}.vessel-box td:first-child{color:#888;width:110px}
+.ctable{width:100%;border-collapse:collapse;font-size:12px;font-family:monospace}
+.ctable th{text-align:left;padding:5px 8px;border-bottom:1px solid #e5e5e3;font-size:11px;color:#888;font-family:sans-serif;font-weight:500}
+.ctable td{padding:5px 8px;border-bottom:1px solid #f0f0f0}
+.ctable tr:last-child td{border:none}
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
+.tag-full{background:#e1f5ee;color:#0f6e56}
+.tag-empty{background:#f0f0f0;color:#666}
+.tag-haz{background:#fce8e8;color:#A32D2D}
+.empty{color:#aaa;font-size:13px;text-align:center;padding:2rem 0}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#378add" stroke-width="2"><path d="M3 17h18M3 17l2-8h14l2 8M3 17v2a1 1 0 001 1h16a1 1 0 001-1v-2M8 9V5a1 1 0 011-1h6a1 1 0 011 1v4"/></svg>
+  <h1>EDI Message Monitor</h1>
+  <span class="badge-live">● Live</span>
+  <span style="margin-left:auto;font-size:12px;color:#aaa">CSP Zeebrugge · TOS Simulation</span>
+</div>
+
+<div class="main">
+  <div class="stats">
+    <div class="stat"><div class="stat-n" id="s-total">0</div><div class="stat-l">Berichten vandaag</div></div>
+    <div class="stat"><div class="stat-n" id="s-ok" style="color:#0f6e56">0</div><div class="stat-l">Geldig</div></div>
+    <div class="stat"><div class="stat-n" id="s-warn" style="color:#854F0B">0</div><div class="stat-l">Waarschuwingen</div></div>
+    <div class="stat"><div class="stat-n" id="s-err" style="color:#A32D2D">0</div><div class="stat-l">Fouten</div></div>
+  </div>
+
+  <div class="grid">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Berichtenlog</span>
+          <button onclick="loadDemo()" style="font-size:12px;padding:4px 10px">Demo laden</button>
+        </div>
+        <div class="panel-body">
+          <div class="msg-list" id="msg-list"><div class="empty">Nog geen berichten</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">Bericht inladen</span></div>
+        <div class="panel-body">
+          <select id="msg-type-sel">
+            <option value="BAPLIE">BAPLIE – Laadbriefje (Bay Plan)</option>
+            <option value="COPARN">COPARN – Container order</option>
+            <option value="CODECO">CODECO – Gate bevestiging</option>
+          </select>
+          <textarea id="raw-input" placeholder="Plak hier een raw EDI bericht...&#10;&#10;Voorbeeld:&#10;UNB+UNOA:1+SENDER+RECEIVER+260528:0800+1'&#10;UNH+1+BAPLIE:D:95B:UN'&#10;BGM+45A+BAPLIE001+9'&#10;..."></textarea>
+          <div class="btn-row">
+            <button class="primary" onclick="parseAndAdd()">▶ Valideer & verwerk</button>
+            <button onclick="document.getElementById('raw-input').value=''">Wis</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Berichtanalyse</span>
+        <span id="result-badge" style="font-size:12px;color:#aaa">Selecteer een bericht</span>
+      </div>
+      <div class="panel-body" id="result-panel">
+        <div class="empty" style="padding:3rem 0">Selecteer een bericht uit de log om de analyse te zien</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const messages=[];
+const DEMOS=[
+  {type:'BAPLIE',raw:`UNB+UNOA:1+ZEEBRUGGE+COSCO+260528:0600+1'\nUNH+1+BAPLIE:D:95B:UN'\nBGM+45A+BAPLIE20260528A+9'\nDTM+137:202605280600:203'\nTDT+20+MSC MAYA+1++MSC:172:20'\nLOC+5+BEZEE:139:6+ZEEBRUGGE'\nLOC+61+CNSHA:139:6+SHANGHAI'\nEQD+CN+MSCU1234567+22G1:102:5++2+5'\nLOC+147+0102006'\nMEA+WT++24500:KGM'\nEQD+CN+CSQQ9876543+42G1:102:5++2+5'\nLOC+147+0204010'\nMEA+WT++18200:KGM'\nEQD+CN+TCKU3331122+22G1:102:5++4+5'\nLOC+147+0102008'\nMEA+WT++12000:KGM'\nDGS+IMD+3+1203'\nFTX+AAD+++FLAMMABLE LIQUID'\nUNT+18+1'\nUNZ+1+1'`},
+  {type:'COPARN',raw:`UNB+UNOA:1+SHIPPER001+ZEEBRUGGE+260528:0730+2'\nUNH+1+COPARN:D:95B:UN'\nBGM+58A+COPARN20260528B+9'\nDTM+137:202605280730:203'\nTDT+20+MSC MAYA+1++MSC:172:20'\nLOC+9+BEZEE:139:6'\nDTM+178:202605290800:203'\nEQD+CN+MSCU5678901+22G1:102:5++2+5'\nNAD+CA+MSC:160:20++MEDITERRANEAN SHIPPING CO'\nEQD+CN++42G1:102:5++1+5'\nNAD+CA+MSC:160:20++MEDITERRANEAN SHIPPING CO'\nUNT+12+1'\nUNZ+1+2'`},
+  {type:'CODECO',raw:`UNB+UNOA:1+ZEEBRUGGE+TRUCKER01+260528:0900+3'\nUNH+1+CODECO:D:95B:UN'\nBGM+34+CODECO20260528C+9'\nDTM+137:202605280900:203'\nEQD+CN+CSQQ9876543+42G1:102:5++2+5'\nTSR+++3'\nLOC+1+ZEEBRUGGE GATE'\nDTM+178:202605280855:203'\nNAD+CF+++JAN JANSSEN TRANSPORT'\nUNT+10+1'\nUNZ+1+3'`},
+  {type:'BAPLIE',raw:`UNB+UNOA:1+AGENT002+ZEEBRUGGE+260528:1100+4'\nUNH+1+BAPLIE:D:95B:UN'\nBGM+45A+BAPLIE20260528D+9'\nDTM+137:202605281100:203'\nTDT+20+EVER GLORY+1++EVERGREEN:172:20'\nLOC+5+BEZEE:139:6+ZEEBRUGGE'\nLOC+61+JPYOK:139:6+YOKOHAMA'\nEQD+CN+EISU4441234+22G1:102:5++4+5'\nLOC+147+0302004'\nMEA+WT++'\nUNT+8+1'\nUNZ+1+4'`}
+];
+
+function parseEDI(raw,type){
+  const lines=raw.trim().split(/[\n']+/).map(l=>l.trim()).filter(Boolean);
+  const segs=lines.map(l=>l.split('+'));
+  const r={valid:true,warnings:[],errors:[],vessel:null,containers:[],msgId:null,sender:null,receiver:null};
+  const UNB=segs.find(s=>s[0]==='UNB'),UNH=segs.find(s=>s[0]==='UNH'),BGM=segs.find(s=>s[0]==='BGM'),UNZ=segs.find(s=>s[0]==='UNZ'),TDT=segs.find(s=>s[0]==='TDT');
+  if(!UNB){r.errors.push('Ontbrekend UNB segment (interchange header)');r.valid=false;}
+  else{const p=UNB[1]?UNB[1].split(':'):[];if(!['UNOA','UNOB','UNOC'].includes(p[0]))r.warnings.push(`UNB syntaxversie onbekend: "${p[0]||'leeg'}"`);r.sender=UNB[2]||'?';r.receiver=UNB[3]||'?';}
+  if(!UNH){r.errors.push('Ontbrekend UNH segment (message header)');r.valid=false;}
+  else{const mi=UNH[2]?UNH[2].split(':'):[];if(mi[0]!==type)r.warnings.push(`Berichttype in UNH is "${mi[0]}", verwacht "${type}"`);}
+  if(!BGM){r.errors.push('Ontbrekend BGM segment (berichtidentificatie)');r.valid=false;}
+  else r.msgId=BGM[2]||'onbekend';
+  if(!UNZ)r.warnings.push('Ontbrekend UNZ segment (interchange trailer)');
+  if(TDT)r.vessel={name:TDT[2]||null,voyage:TDT[1]||null,carrier:TDT[5]?TDT[5].split(':')[0]:null};
+  else if(type==='BAPLIE')r.warnings.push('Geen TDT segment — scheepsnaam onbekend');
+  segs.filter(s=>s[0]==='EQD').forEach((eqd,i)=>{
+    const id=eqd[2]||null,sizeType=eqd[3]?eqd[3].split(':')[0]:null,status=eqd[5]||null;
+    const idx=segs.indexOf(eqd)+1;
+    let pos=null,weight=null,haz=false,hazClass=null;
+    for(let j=idx;j<Math.min(idx+7,segs.length);j++){
+      const s=segs[j];if(s[0]==='EQD')break;
+      if(s[0]==='LOC'&&s[1]==='147')pos=s[2]||null;
+      if(s[0]==='MEA'&&s[1]==='WT'){const wp=s[3]?s[3].split(':'):[];weight=wp[0]?parseInt(wp[0]):null;}
+      if(s[0]==='DGS'){haz=true;hazClass=s[2]||null;}
+    }
+    const c={id,sizeType,status,pos,weight,haz,hazClass,warnings:[],errors:[]};
+    if(!id){c.errors.push('Container ID ontbreekt');r.valid=false;}
+    else if(!/^[A-Z]{4}\d{7}$/.test(id))c.warnings.push(`Container ID formaat afwijkend: "${id}"`);
+    if(!weight&&type==='BAPLIE')c.warnings.push('Gewicht ontbreekt (MEA+WT)');
+    if(weight&&weight>30480){c.errors.push(`Gewicht ${weight}kg overschrijdt max (30.480kg)`);r.valid=false;}
+    if(!pos&&type==='BAPLIE')c.warnings.push('Positie aan boord ontbreekt (LOC+147)');
+    r.containers.push(c);
+    r.warnings.push(...c.warnings.map(w=>`Container ${id||i+1}: ${w}`));
+    r.errors.push(...c.errors.map(e=>`Container ${id||i+1}: ${e}`));
+    if(c.errors.length)r.valid=false;
+  });
+  return r;
+}
+
+function ft(){const n=new Date();return[n.getHours(),n.getMinutes(),n.getSeconds()].map(x=>x.toString().padStart(2,'0')).join(':');}
+
+let selectedIdx=null;
+function addMessage(type,raw){
+  const p=parseEDI(raw,type);
+  const status=p.errors.length?'err':p.warnings.length?'warn':'ok';
+  messages.unshift({type,raw,parsed:p,status,vessel:p.vessel?p.vessel.name:'Onbekend',time:ft(),id:Date.now()});
+  renderList();updateStats();selectMessage(0);
+}
+
+function renderList(){
+  const el=document.getElementById('msg-list');
+  if(!messages.length){el.innerHTML='<div class="empty">Nog geen berichten</div>';return;}
+  el.innerHTML=messages.map((m,i)=>`<div class="msg-item${i===selectedIdx?' active':''}" onclick="selectMessage(${i})"><div class="msg-meta"><span class="msg-type"><span class="dot ${m.status}"></span>${m.type}</span><span class="msg-time">${m.time}</span></div><div class="msg-vessel">${m.vessel} · ${m.parsed.containers.length} containers</div></div>`).join('');
+}
+
+function selectMessage(i){
+  selectedIdx=i;renderList();
+  const m=messages[i],p=m.parsed;
+  let html='';
+  if(p.vessel)html+=`<div class="vessel-box"><table><tr><td>Schip</td><td><strong>${p.vessel.name||'—'}</strong></td></tr><tr><td>Voyage</td><td>${p.vessel.voyage||'—'}</td></tr><tr><td>Carrier</td><td>${p.vessel.carrier||'—'}</td></tr><tr><td>Bericht ID</td><td>${p.msgId||'—'}</td></tr><tr><td>Afzender</td><td>${p.sender||'—'}</td></tr></table></div>`;
+  html+=`<div class="result-area">`;
+  if(!p.errors.length&&!p.warnings.length)html+=`<span class="seg-ok">✓ Bericht volledig geldig — geen fouten of waarschuwingen\n</span>`;
+  p.errors.forEach(e=>{html+=`<span class="seg-err">✗ FOUT: ${e}\n</span>`;});
+  p.warnings.forEach(w=>{html+=`<span class="seg-warn">⚠ WARN: ${w}\n</span>`;});
+  html+=`</div>`;
+  if(p.containers.length){
+    html+=`<div style="font-size:12px;font-weight:500;color:#888;margin-bottom:6px">${p.containers.length} container${p.containers.length>1?'s':''} gedetecteerd</div><div style="overflow-x:auto"><table class="ctable"><thead><tr><th>ID</th><th>Type</th><th>Positie</th><th>Gewicht</th><th>Status</th></tr></thead><tbody>`;
+    p.containers.forEach(c=>{
+      const w=c.weight?`${c.weight.toLocaleString()} kg`:'—';
+      const isEmpty=c.status==='1'||c.status==='4';
+      html+=`<tr><td>${c.id||'—'}</td><td>${c.sizeType||'—'}</td><td>${c.pos||'—'}</td><td>${w}</td><td><span class="tag ${isEmpty?'tag-empty':'tag-full'}">${isEmpty?'Leeg':'Vol'}</span>${c.haz?`<span class="tag tag-haz" style="margin-left:4px">IMO ${c.hazClass}</span>`:''}</td></tr>`;
+    });
+    html+=`</tbody></table></div>`;
+  }
+  const badge=p.errors.length?`<span style="color:#A32D2D;font-size:12px">✗ ${p.errors.length} fout${p.errors.length>1?'en':''}</span>`:p.warnings.length?`<span style="color:#854F0B;font-size:12px">⚠ ${p.warnings.length} waarschuwing${p.warnings.length>1?'en':''}</span>`:`<span style="color:#0f6e56;font-size:12px">✓ Geldig</span>`;
+  document.getElementById('result-badge').innerHTML=badge;
+  document.getElementById('result-panel').innerHTML=html;
+}
+
+function updateStats(){
+  document.getElementById('s-total').textContent=messages.length;
+  document.getElementById('s-ok').textContent=messages.filter(m=>m.status==='ok').length;
+  document.getElementById('s-warn').textContent=messages.filter(m=>m.status==='warn').length;
+  document.getElementById('s-err').textContent=messages.filter(m=>m.status==='err').length;
+}
+
+function parseAndAdd(){
+  const raw=document.getElementById('raw-input').value.trim();
+  if(!raw)return;
+  addMessage(document.getElementById('msg-type-sel').value,raw);
+  document.getElementById('raw-input').value='';
+}
+
+let di=0;
+function loadDemo(){const d=DEMOS[di%DEMOS.length];di++;addMessage(d.type,d.raw);}
+loadDemo();loadDemo();loadDemo();
+</script>
+</body>
+</html>

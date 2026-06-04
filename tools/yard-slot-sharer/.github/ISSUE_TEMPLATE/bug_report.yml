@@ -1,0 +1,72 @@
+name: Bug Report
+description: Report a bug or unexpected behaviour
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. Fill in as much detail as you can.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - API / Server
+        - Frontend / UI
+        - Database / Migrations
+        - Docker / Deployment
+        - Authentication
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+      placeholder: "When I click 'Aanvragen' on a listing, the page shows an error instead of the request form."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Log in as any terminal
+        2. Go to Marktplaats
+        3. Click a listing card
+        4. Click 'Aanvragen'
+        5. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      placeholder: The request form should appear.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Node version, OS, browser, Docker version if relevant.
+      placeholder: |
+        Node: 20.x
+        OS: macOS 14
+        Browser: Chrome 125
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or screenshots
+      description: Server console output, browser console errors, or screenshots.
+    validations:
+      required: false

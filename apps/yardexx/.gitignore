@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Env files (NEVER commit these)
+.env
+.env.local
+.env.*.local
+.env.development.local
+
+# Build
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+
+# Prisma
+prisma/migrations/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.vercel

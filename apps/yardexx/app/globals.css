@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f4f6f9;
+  color: #1a2535;
+  margin: 0;
+}
+
+/* Mobile nav */
+@media (max-width: 768px) {
+  .nav-desktop { display: none !important; }
+  .nav-mobile-btn { display: block !important; }
+}
+
+/* Responsive grids */
+@media (max-width: 600px) {
+  .grid-2 { grid-template-columns: 1fr !important; }
+  .grid-3 { grid-template-columns: 1fr !important; }
+}
+
+/* Card hover */
+a > div { transition: box-shadow 0.2s, transform 0.15s; }
+a > div:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f4f6f9; }
+::-webkit-scrollbar-thumb { background: #e8edf4; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #8a96a8; }
+
+/* Focus visible */
+:focus-visible { outline: 2px solid #00c9a7; outline-offset: 2px; }

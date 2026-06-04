@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: yardexx
+      POSTGRES_PASSWORD: yardexx_dev
+      POSTGRES_DB: yardexx_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - yardexx_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U yardexx -d yardexx_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://yardexx:yardexx_dev@db:5432/yardexx_db
+      JWT_SECRET: change-this-in-production
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+
+volumes:
+  yardexx_pgdata:

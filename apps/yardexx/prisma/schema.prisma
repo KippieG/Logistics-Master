@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum CapacityType {
+  container
+  roro
+  dry_bulk
+  tank
+  cold_storage
+}
+
+enum Region {
+  antwerp
+  zeebrugge
+  ghent
+  liege
+  brussels
+  rotterdam
+  amsterdam
+  vlissingen
+  terneuzen
+  moerdijk
+  hamburg
+  le_havre
+}
+
+enum ListingSide {
+  offer
+  demand
+}
+
+enum ListingStatus {
+  active
+  matched
+  closed
+  expired
+}
+
+enum MatchStatus {
+  pending
+  accepted
+  rejected
+  cancelled
+}
+
+enum UserRole {
+  admin
+  operator
+}
+
+model Terminal {
+  id           String    @id @default(cuid())
+  name         String
+  region       Region
+  vatNumber    String?
+  contactName  String?
+  contactPhone String?
+  website      String?
+  verifiedAt   DateTime?
+  rejectedAt   DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  users        User[]
+  listings     Listing[]
+  sentRequests MatchRequest[] @relation("RequestingTerminal")
+}
+
+model User {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  password   String
+  role       UserRole @default(operator)
+  terminalId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  terminal    Terminal             @relation(fields: [terminalId], references: [id])
+  resetTokens PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Listing {
+  id               String        @id @default(cuid())
+  terminalId       String
+  side             ListingSide
+  capacityType     CapacityType
+  region           Region
+  volumeM2         Float
+  pricePerM2PerDay Float
+  availableFrom    DateTime
+  availableTo      DateTime
+  status           ListingStatus @default(active)
+  description      String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  terminal Terminal       @relation(fields: [terminalId], references: [id])
+  requests MatchRequest[]
+}
+
+model MatchRequest {
+  id                   String      @id @default(cuid())
+  listingId            String
+  requestingTerminalId String
+  status               MatchStatus @default(pending)
+  message              String?
+  // Anonymous by default after deal — each party chooses to reveal
+  ownerRevealed        Boolean     @default(false)
+  requesterRevealed    Boolean     @default(false)
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+
+  listing            Listing  @relation(fields: [listingId], references: [id])
+  requestingTerminal Terminal @relation("RequestingTerminal", fields: [requestingTerminalId], references: [id])
+
+  @@unique([listingId, requestingTerminalId])
+}

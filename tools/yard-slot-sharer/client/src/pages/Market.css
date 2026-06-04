@@ -1,0 +1,115 @@
+.market-filters {
+  margin-bottom: 1.5rem;
+}
+
+.filter-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.filter-row .form-group { flex: 1; }
+
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.listing-card {
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.listing-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.listing-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.listing-type-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--blue);
+  background: var(--blue-light);
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+}
+
+.listing-capacity {
+  display: flex;
+  align-items: baseline;
+  gap: 0.375rem;
+  margin-bottom: 0.75rem;
+}
+
+.capacity-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  line-height: 1;
+}
+
+.capacity-unit {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  font-weight: 500;
+}
+
+.listing-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.meta-item {
+  font-size: 0.8rem;
+  color: var(--gray-600);
+}
+
+.listing-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--gray-100);
+}
+
+.listing-price {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--green);
+}
+.listing-price span {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--gray-600);
+}
+.listing-price.negotiable {
+  font-size: 0.8rem;
+  color: var(--gray-400);
+  font-weight: 500;
+}
+
+.listing-description {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--gray-600);
+  background: var(--gray-50);
+  padding: 0.5rem 0.75rem;
+  border-radius: calc(var(--radius) - 2px);
+  border-left: 3px solid var(--blue-light);
+}
+
+@media (max-width: 768px) {
+  .filter-row { flex-direction: column; }
+  .listings-grid { grid-template-columns: 1fr; }
+}

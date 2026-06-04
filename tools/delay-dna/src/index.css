@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: #0b0d16;
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root { min-height: 100vh; }
+
+@layer utilities {
+  .glass {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .glass-red {
+    background: rgba(141,29,69,0.08);
+    border: 1px solid rgba(141,29,69,0.25);
+  }
+  .glass-yellow {
+    background: rgba(248,206,62,0.07);
+    border: 1px solid rgba(248,206,62,0.22);
+  }
+  .glass-green {
+    background: rgba(34,197,94,0.07);
+    border: 1px solid rgba(34,197,94,0.22);
+  }
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar       { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: #0b0d16; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
+
+/* ── ECS animated top bar ── */
+.ecs-bar {
+  height: 3px;
+  background: linear-gradient(90deg, #8D1D45 0%, #F8CE3E 50%, #8D1D45 100%);
+  background-size: 200% auto;
+  animation: barshift 4s linear infinite;
+}
+@keyframes barshift {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
