@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Master Hub Dashboard</title>
+    <style>
+        :root {
+            --primary: #C8F135;
+            --bg: #080808;
+            --card-bg: #111;
+            --text: #ffffff;
+            --text-dim: #999;
+        }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 40px;
+            line-height: 1.6;
+        }
+        .header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        h1 { font-size: 2.5rem; margin: 0; color: var(--primary); }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .section:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        h2 { font-size: 1.25rem; margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 12px; padding-left: 0; }
+        a { color: var(--text); text-decoration: none; display: flex; justify-content: space-between; align-items: center; }
+        a:hover { color: var(--primary); }
+        .badge {
+            background: #222;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            border: 1px solid #444;
+        }
+        .tagline { color: var(--text-dim); font-style: italic; margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚢 Logistics Master Hub</h1>
+        <div class="tagline">The Ultimate Port & Supply Chain Engineering Suite</div>
+    </div>
+
+    <div class="grid">
+        <div class="section">
+            <h2>🏗️ Enterprise Apps</h2>
+            <ul>
+                <li><a href="apps/yardexx/README.md"><span>YardExx</span> <span class="badge">Next.js</span></a></li>
+                <li><a href="apps/ecoload/README.md"><span>Ecoload</span> <span class="badge">.NET/Angular</span></a></li>
+                <li><a href="apps/tos-sim/README.md"><span>TOS-Simulator</span> <span class="badge">Simulation</span></a></li>
+                <li><a href="apps/shipment-tracking-platform/README.md"><span>Shipment Tracking</span> <span class="badge">.NET 8</span></a></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Optimization Tools</h2>
+            <ul>
+                <li><a href="tools/delay-dna/README.md"><span>Delay-DNA</span> <span class="badge">AI/React</span></a></li>
+                <li><a href="tools/eco-match-engine/README.md"><span>Eco-Match Engine</span> <span class="badge">Python</span></a></li>
+                <li><a href="tools/portpulse/README.md"><span>PortPulse</span> <span class="badge">Analytics</span></a></li>
+                <li><a href="tools/warehouse-advisor/README.md"><span>Warehouse Advisor</span> <span class="badge">Vite</span></a></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🏢 Company Audits</h2>
+            <ul>
+                <li><a href="companies/ecs/README.md"><span>ECS European Containers</span> <span class="badge">Full Audit</span></a></li>
+                <li><a href="companies/csp/README.md"><span>CSP Zeebrugge</span> <span class="badge">TOS/VBS</span></a></li>
+                <li><a href="companies/ico/README.md"><span>ICO Terminals</span> <span class="badge">Automation</span></a></li>
+                <li><a href="companies/cldn/README.md"><span>CLdN / C.RO Ports</span> <span class="badge">Smart Port</span></a></li>
+                <li><a href="companies/psa/README.md"><span>PSA Zeebrugge</span> <span class="badge">Hydrogen Hub</span></a></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📖 Knowledge Hub</h2>
+            <ul>
+                <li><a href="knowledge/enterprise-stack/README.md"><span>Enterprise Tech Stack</span> <span class="badge">Guide</span></a></li>
+                <li><a href="knowledge/port-data-guide.md"><span>EDI & API Standards</span> <span class="badge">Technical</span></a></li>
+                <li><a href="companies/ecs/02_audit/brexit-digital-case-study.md"><span>Brexit Impact Case</span> <span class="badge">Strategy</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; text-align: center; color: var(--text-dim); font-size: 0.8rem;">
+        &copy; 2026 Philippe Godfroy (KippieG) - Connecting technology to the heart of logistics.
+    </div>
+</body>
+</html>
