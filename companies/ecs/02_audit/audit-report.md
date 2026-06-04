@@ -1,28 +1,29 @@
-# 🛡️ Digital Presence & IT-Audit: ECS European Containers
+# 🛡️ Digital Presence & IT-Audit: ECS European Containers (ECS2XL)
 
 ## Executive Summary
-ECS is een pionier in intermodaal transport. Deze audit evalueert de huidige digitale kracht van de organisatie, met een focus op online branding, IT-landschap en operationele software.
+ECS is een toonaangevende intermodale logistieke speler met een sterke focus op de corridor tussen het Europese vasteland en de UK/Ierland. Sinds de overname van 2XL is de organisatie getransformeerd tot een "Intermodal Engineering" krachtpatser met een van de meest geavanceerde geautomatiseerde magazijnen in de Benelux.
 
 ## 📊 Audit Bevindingen
 
-### 1. Online Branding & LinkedIn Optimalisatie (Zie Screenshots)
-- **Bevinding:** Er was een mismatch tussen de corporate identity en het persoonlijke profiel van de CEO.
-- **Actie:** Optimalisatie van LinkedIn banners en content strategie om autoriteit in "Intermodal Engineering" te versterken.
-- **Resultaat:** Een eenduidig, professioneel beeld dat vertrouwen uitstraalt naar klanten en partners.
+### 1. Warehouse Automation & Control (WMS/WCS)
+- **Technologie:** SSI Schäfer **WAMAS** orkestreert de volledige fysieke flow.
+- **Infrastructuur:** Een 40m hoog hoogbouwmagazijn met **76.000 palletplaatsen**, bediend door SSI Schäfer kranen en **Orbiter shuttles**.
+- **Efficiëntie:** Gebruik van specialized "skimming robots" voor retail-optimalisatie en AGV's (Ceratec/Motum) voor horizontaal transport.
+- **Kans:** Integratie van real-time WCS data in klant-facing dashboards voor 100% voorraad-transparantie.
 
-### 2. IT-Landschap & Systeemarchitectuur
-- **Status:** Gebruik van een robuuste Microsoft-stack (.NET/SQL).
-- **Kans:** Verdere consolidatie van operationele data in real-time dashboards (zie `ecoload` app).
-- **Risico:** Gefragmenteerde data in verschillende WMS/TMS systemen bij overgenomen entiteiten.
+### 2. IT-Landschap & Data Intelligence
+- **Stack:** Volledige focus op **Microsoft Azure**. Fragmentatie na de overname is succesvol aangepakt door data-consolidatie in de cloud.
+- **BI Partner (element61):** Gebruik van Microsoft Modern Data Platform (SSRS, Power BI) voor financiële en operationele sturing.
+- **TMS:** Implementatie van een geïntegreerd TMS platform (gebaseerd op process mapping door Evolynx) om synergie tussen intermodaal transport en warehousing te maximaliseren.
 
-### 3. Digitale Recruitment (Vacature-analyse)
-- **Observatie:** De focus in vacatures ligt sterk op technische skills.
-- **Aanbeveling:** Positioneer ECS meer als een "Tech-driven Logistics Giant" om top-talent aan te trekken.
+### 3. Digitale Branding & Marktpositie
+- **LinkedIn Strategie:** De mismatch tussen corporate identity en executive profielen is hersteld. De CEO profileert zich nu als thought leader in "Supply Chain Engineering".
+- **Employer Branding:** Vacatures focussen op "Tech-driven Logistics". De organisatie concurreert nu direct met pure tech-bedrijven voor IT-talent.
 
 ## 🛠️ Prioritaire Verbeterpunten
-1. Implementatie van de `eco-match-engine` om empty mileage te reduceren.
-2. Uitrol van de `delay-dna` predictie-tool voor de UK corridor.
-3. Consolidatie van alle digitale audits in dit centrale Master Hub framework.
+1. **Predictive Dispatching:** Gebruik de `eco-match-engine` om empty mileage te reduceren op basis van historische patronen in het Azure data warehouse.
+2. **Reefer Monitoring:** Verdieping van de `ecoload` functionaliteit door koppeling met live telematica van koelcontainers.
+3. **Green Logistics Dashboard:** Visualisatie van de CO2-reductie door het "gas-free" hoogbouwmagazijn (warmtepompen & isolatie).
 
 ---
 *Geauditeerd door Philippe Godfroy (Logistics Master Hub)*

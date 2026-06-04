@@ -1,29 +1,29 @@
-# 🛡️ Digital & Operational Audit: CSP Zeebrugge
+# 🛡️ Digital & Operational Audit: CSP Zeebrugge (COSCO Shipping Ports)
 
 ## Executive Summary
-CSP Zeebrugge is een cruciale gateway in de haven van Zeebrugge. Deze audit focust op de digitale efficiëntie van de terminal-operaties, de robuustheid van de N4/Navis implementatie en de publieke digitale interface (VBS).
+CSP Zeebrugge fungeert als de cruciale deep-sea gateway voor de COSCO-groep in Noordwest-Europa. Als de eerste terminal in het netwerk die volledig is gemigreerd naar Navis N4, dient het als de blauwdruk voor de digitale standaardisatie van de groep.
 
 ## 📊 Audit Points
 
-### 1. Terminal Operating System (TOS) Integriteit
-- **Status:** Operationeel op Navis N4.
-- **Bevinding:** Sterke afhankelijkheid van Groovy-extensies voor maatwerk logica.
-- **Risico:** Versie-upgrades kunnen complex zijn door diepe custom code integratie.
-- **Aanbeveling:** Centraliseer Groovy-logica in herbruikbare modules (zie `04_tooling`).
+### 1. Terminal Operating System (TOS) & Core Digitalization
+- **Systeem:** **Navis N4** fungeert als het zenuwcentrum voor schip-planning, yard-strategie en gate-operaties.
+- **Automatisering:** Integratie van **Expert Decking** (yard optimalisatie) en **PrimeRoute** (equipment dispatching).
+- **Risico:** Sterke afhankelijkheid van custom **Groovy extensions** voor bedrijfsspecifieke logica, wat upgrades kan bemoeilijken.
 
-### 2. Vehicle Booking System (VBS) Analyse
-- **User Experience:** De interface voor transporteurs is functioneel maar gedateerd.
-- **Data-stroom:** Real-time updates van slots zijn essentieel voor het verminderen van kade-congestie.
-- **Kans:** Integratie van AI-voorspellingen voor gate-drukte (DNA of Delay principes).
+### 2. Gate & Vehicle Booking System (VBS)
+- **Technologie:** Gebruik van **Camco** OCR-camera's voor containerherkenning tot 30 km/u en biometrische vingerafdrukscans voor toegangscontrole.
+- **Efficiëntie:** Het VBS vermindert truck-turnaround tijden aanzienlijk, maar vereist nog nauwere integratie met transport-systemen (TMS) om kade-congestie proactief te voorkomen.
+- **Kans:** Uitrol van **5G Smart Port** trials voor autonoom horizontaal transport via driverless trucks (Dongfeng project).
 
-### 3. Digitale Zichtbaarheid & Communicatie
-- **Website:** Informatief maar mist interactieve elementen voor klanten.
-- **EDI-stromen:** EDIFACT/CODECO stromen zijn stabiel maar kunnen geoptimaliseerd worden voor lagere latency.
+### 3. Multimodale Connectiviteit
+- **Spoor:** 3 on-site sporen van 780m, directe verbindingen met Duisburg en Dourges.
+- **Weg:** Directe ontsluiting via de A11; gebruik van "extended gate" concepten om tot 1.000 TEU per dag naar het achterland te pushen.
+- **Deep Sea:** 17,5m diepgang zonder getijde-beperkingen maakt het uniek t.o.v. Antwerpen/Rotterdam.
 
 ## 🛠️ Actieplan
-1. Optimalisatie van Gate-interceptors voor snellere truck-afhandeling.
-2. Uitrol van uitgebreide BI-dashboards voor kadekraan-productiviteit.
-3. Verbetering van reefer-monitoring via geautomatiseerde alerts.
+1. **Groovy Modernization:** Centraliseer en documenteer alle N4 Groovy scripts (zie `04_tooling`) om de onderhoudbaarheid te vergroten.
+2. **EDI Latency Reductie:** Optimalisatie van CODECO/EDIFACT berichtenstromen voor real-time status updates naar rederijen.
+3. **AI Gate Prediction:** Gebruik van historische VBS data om truck-congestie op piekuren te voorspellen via machine learning.
 
 ---
 *Geauditeerd door Philippe Godfroy (Logistics Master Hub)*
