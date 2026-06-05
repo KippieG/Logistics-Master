@@ -11,6 +11,7 @@
             --card-bg: #111;
             --text: #ffffff;
             --text-dim: #999;
+            --accent: #00E5FF;
         }
         body {
             font-family: 'Inter', -apple-system, sans-serif;
@@ -24,90 +25,119 @@
             border-bottom: 2px solid var(--primary);
             padding-bottom: 20px;
             margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
         }
-        h1 { font-size: 2.5rem; margin: 0; color: var(--primary); }
+        h1 { font-size: 2.5rem; margin: 0; color: var(--primary); letter-spacing: -1px; }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
         }
         .section {
             background: var(--card-bg);
             padding: 25px;
-            border-radius: 12px;
+            border-radius: 16px;
             border: 1px solid #333;
-            transition: transform 0.2s, border-color 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
         .section:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             border-color: var(--primary);
+            box-shadow: 0 12px 30px rgba(200, 241, 53, 0.1);
         }
-        h2 { font-size: 1.25rem; margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--primary);
+            opacity: 0.3;
+        }
+        h2 { font-size: 1.4rem; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; color: var(--accent); }
         ul { list-style: none; padding: 0; }
-        li { margin-bottom: 12px; padding-left: 0; }
-        a { color: var(--text); text-decoration: none; display: flex; justify-content: space-between; align-items: center; }
-        a:hover { color: var(--primary); }
+        li { margin-bottom: 14px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        li:last-child { border-bottom: none; }
+        a { color: var(--text); text-decoration: none; display: flex; flex-direction: column; }
+        a .title { font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+        a .desc { font-size: 0.8rem; color: var(--text-dim); margin-top: 4px; }
+        a:hover .title { color: var(--primary); }
         .badge {
             background: #222;
             padding: 2px 8px;
             border-radius: 4px;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            border: 1px solid #444;
+            font-size: 0.65rem;
+            color: var(--primary);
+            border: 1px solid #333;
+            text-transform: uppercase;
         }
-        .tagline { color: var(--text-dim); font-style: italic; margin-bottom: 30px; }
+        .tagline { color: var(--text-dim); font-style: italic; }
+        .status-pill {
+            background: rgba(200, 241, 53, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border: 1px solid var(--primary);
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🚢 Logistics Master Hub</h1>
-        <div class="tagline">The Ultimate Port & Supply Chain Engineering Suite</div>
+        <div>
+            <h1>🚢 Logistics Master Hub</h1>
+            <div class="tagline">Enterprise Port & Supply Chain Engineering Suite</div>
+        </div>
+        <div class="status-pill">HUB STATUS: OPERATIONAL</div>
     </div>
 
     <div class="grid">
         <div class="section">
             <h2>🏗️ Enterprise Apps</h2>
             <ul>
-                <li><a href="apps/yardexx/README.md"><span>YardExx</span> <span class="badge">Next.js</span></a></li>
-                <li><a href="apps/ecoload/README.md"><span>Ecoload</span> <span class="badge">.NET/Angular</span></a></li>
-                <li><a href="apps/tos-sim/README.md"><span>TOS-Simulator</span> <span class="badge">Simulation</span></a></li>
-                <li><a href="apps/shipment-tracking-platform/README.md"><span>Shipment Tracking</span> <span class="badge">.NET 8</span></a></li>
+                <li><a href="apps/yardexx/README.md"><div class="title">YardExx <span class="badge">Marketplace</span></div><div class="desc">B2B terminal capacity sharing platform.</div></a></li>
+                <li><a href="apps/ecoload/README.md"><div class="title">Ecoload <span class="badge">Intelligence</span></div><div class="desc">Core supply chain orchestration suite.</div></a></li>
+                <li><a href="apps/tos-sim/README.md"><div class="title">TOS-Simulator <span class="badge">Simulation</span></div><div class="desc">Interactive port terminal emulator.</div></a></li>
+                <li><a href="apps/shipment-tracking-platform/README.md"><div class="title">Shipment Tracker <span class="badge">Cloud</span></div><div class="desc">High-scale Azure-native tracking.</div></a></li>
             </ul>
         </div>
 
         <div class="section">
             <h2>🛠️ Optimization Tools</h2>
             <ul>
-                <li><a href="tools/delay-dna/README.md"><span>Delay-DNA</span> <span class="badge">AI/React</span></a></li>
-                <li><a href="tools/eco-match-engine/README.md"><span>Eco-Match Engine</span> <span class="badge">Python</span></a></li>
-                <li><a href="tools/portpulse/README.md"><span>PortPulse</span> <span class="badge">Analytics</span></a></li>
-                <li><a href="tools/warehouse-advisor/README.md"><span>Warehouse Advisor</span> <span class="badge">Vite</span></a></li>
+                <li><a href="tools/delay-dna/README.md"><div class="title">Delay-DNA <span class="badge">AI/ML</span></div><div class="desc">Genetic prediction of logistics delays.</div></a></li>
+                <li><a href="tools/eco-match-engine/README.md"><div class="title">Eco-Match Engine <span class="badge">FastAPI</span></div><div class="desc">Empty mileage reduction algorithm.</div></a></li>
+                <li><a href="tools/portpulse/README.md"><div class="title">PortPulse <span class="badge">Analytics</span></div><div class="desc">Terminal "Dead Time" breakdown dashboard.</div></a></li>
+                <li><a href="tools/warehouse-advisor/README.md"><div class="title">Warehouse Advisor <span class="badge">Vite</span></div><div class="desc">Real-time warehouse layout optimization.</div></a></li>
+            </ul>
+        </div>
+
+        <div class="section" style="border-color: var(--accent);">
+            <h2 style="color: var(--primary);">🏢 Port Giants (Audits)</h2>
+            <ul>
+                <li><a href="companies/ecs/README.md"><div class="title">ECS European Containers <span class="badge">Deep Dive</span></div><div class="desc">Automation, Strategy & Brexit Case Study.</div></a></li>
+                <li><a href="companies/csp/README.md"><div class="title">CSP Zeebrugge <span class="badge">Navis N4</span></div><div class="desc">TOS standardization and 5G Smart Port.</div></a></li>
+                <li><a href="companies/ico/README.md"><div class="title">ICO Terminals <span class="badge">Automotive</span></div><div class="desc">Robotic parking and Digital Twin models.</div></a></li>
+                <li><a href="companies/cldn/README.md"><div class="title">CLdN / C.RO Ports <span class="badge">Smart 4.0</span></div><div class="desc">In-house development & Cloud-native.</div></a></li>
+                <li><a href="companies/psa/README.md"><div class="title">PSA Zeebrugge <span class="badge">Hydrogen</span></div><div class="desc">Green terminal & Hybrid automation.</div></a></li>
             </ul>
         </div>
 
         <div class="section">
-            <h2>🏢 Company Audits</h2>
+            <h2>📖 Knowledge & Strategy</h2>
             <ul>
-                <li><a href="companies/ecs/README.md"><span>ECS European Containers</span> <span class="badge">Full Audit</span></a></li>
-                <li><a href="companies/csp/README.md"><span>CSP Zeebrugge</span> <span class="badge">TOS/VBS</span></a></li>
-                <li><a href="companies/ico/README.md"><span>ICO Terminals</span> <span class="badge">Automation</span></a></li>
-                <li><a href="companies/cldn/README.md"><span>CLdN / C.RO Ports</span> <span class="badge">Smart Port</span></a></li>
-                <li><a href="companies/psa/README.md"><span>PSA Zeebrugge</span> <span class="badge">Hydrogen Hub</span></a></li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>📖 Knowledge Hub</h2>
-            <ul>
-                <li><a href="knowledge/enterprise-stack/README.md"><span>Enterprise Tech Stack</span> <span class="badge">Guide</span></a></li>
-                <li><a href="knowledge/port-data-guide.md"><span>EDI & API Standards</span> <span class="badge">Technical</span></a></li>
-                <li><a href="companies/ecs/02_audit/brexit-digital-case-study.md"><span>Brexit Impact Case</span> <span class="badge">Strategy</span></a></li>
+                <li><a href="knowledge/enterprise-stack/README.md"><div class="title">Enterprise Tech Stack <span class="badge">Guide</span></div><div class="desc">The complete guide to logistics software.</div></a></li>
+                <li><a href="knowledge/port-data-guide.md"><div class="title">EDI & API Standards <span class="badge">Technical</span></div><div class="desc">UN/EDIFACT (CODECO, COARRI) patterns.</div></a></li>
+                <li><a href="knowledge/port-wide-synergy.md"><div class="title">Port Synergies <span class="badge">Genius</span></div><div class="desc">Cross-terminal logic & future vision.</div></a></li>
             </ul>
         </div>
     </div>
 
-    <div style="margin-top: 40px; text-align: center; color: var(--text-dim); font-size: 0.8rem;">
-        &copy; 2026 Philippe Godfroy (KippieG) - Connecting technology to the heart of logistics.
+    <div style="margin-top: 50px; text-align: center; color: var(--text-dim); font-size: 0.85rem; border-top: 1px solid #222; padding-top: 20px;">
+        Designed & Engineered by <strong>Philippe Godfroy (KippieG)</strong> | <span style="color: var(--primary);">Architecture • Logistics • Data</span>
     </div>
 </body>
 </html>
