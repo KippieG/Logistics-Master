@@ -1,20 +1,18 @@
-<div align="center">
-
-# ECS European Containers — Digital Presence Audit
-
-**Scope:** ecs.be · LinkedIn (company + CEO) · Customer Portals · Legal & Compliance  
-**Method:** Manual review · curl/HTTP inspection · page source analysis · LinkedIn data  
-**Date:** June 2026 · **Author:** Philippe Godfroy
+# 🛡️ ECS European Containers: Comprehensive Digital Presence Audit
 
 ![Audit Scope](https://img.shields.io/badge/SCOPE-WEB_LINKEDIN_PORTALS-orange?style=for-the-badge)
 ![Date](https://img.shields.io/badge/DATE-JUNE_2026-blue?style=for-the-badge)
 ![Severity](https://img.shields.io/badge/MAX_SEVERITY-CRITICAL-red?style=for-the-badge)
 
+<div align="center">
+**Scope:** ecs.be · LinkedIn (company + CEO) · Customer Portals · Legal & Compliance  
+**Method:** Manual review · curl/HTTP inspection · page source analysis · LinkedIn data  
+**Author:** Philippe Godfroy
 </div>
 
 ---
 
-## Summary
+## 📋 Summary Table
 
 | # | Finding | Area | Severity | Fix Effort |
 |---|---------|------|----------|------------|
@@ -74,17 +72,7 @@ Customer portal sessions — login, shipment data, track & trace — transmitted
 **Page:** [ecs.be/nl/algemene-voorwaarden](https://www.ecs.be/nl/algemene-voorwaarden)
 
 ### 3a. No click-wrap acceptance
-
-All six T&C documents are plain PDF downloads with no acceptance mechanism:
-
-```
-❌ No checkbox ("I have read and accept the terms")
-❌ No confirmation step before download
-❌ No logged acceptance timestamp
-✅ PDF freely accessible to anyone, accepted or not
-```
-
-Without click-wrap, proving in a dispute that a customer accepted the current version of the T&C is significantly harder under both Belgian and UK contract law.
+All six T&C documents are plain PDF downloads with no acceptance mechanism. Without click-wrap, proving in a dispute that a customer accepted the current version of the T&C is significantly harder under both Belgian and UK contract law.
 
 ### 3b. Document version matrix
 
@@ -97,9 +85,7 @@ Without click-wrap, proving in a dispute that a customer accepted the current ve
 | Transport Carrier (non-UK) | ECS NV / 2XL NV | Aug 2025 | ✅ |
 | Transport Carrier (UK) | ECS NV / 2XL NV | **Jul 2024** | ⚠️ 14 months old |
 
-The UK carrier T&C has not been updated since July 2024. The UK's Road Haulage Association issued updated guidance on post-Brexit cabotage rules and HMRC import procedures in late 2024 and early 2025. A document predating these changes may no longer reflect current ECS obligations toward UK transport carriers.
-
-**Fix:** Add click-wrap per document group. Review the UK carrier T&C against current HMRC/RHA guidance and update.
+The UK carrier T&C has not been updated since July 2024. A document predating Brexit-related HMRC/RHA updates may no longer reflect current obligations.
 
 ---
 
@@ -107,61 +93,37 @@ The UK carrier T&C has not been updated since July 2024. The UK's Road Haulage A
 
 **Source:** Page source of ecs.be — `eu_cookie_compliance` configuration block
 
-### What the cookie banner shows users
-
 The consent popup presents **two** categories:
+- ✅ Functionele en statistische cookies
+- ☐ Analytische cookies
 
-- ✅ Functionele en statistische cookies *(required, pre-ticked)*
-- ☐ Analytische cookies *(optional opt-in)*
-
-### What the configuration actually loads
-
-From the `allowed_cookies` field in the page source:
-
-```
-functional:    BIGipServer, lang, _Ifa, Iissc
-analytics:     _ga, _gid, _gat, hubspotutk, nQ_cookieID (Leadfeeder)
-advertisement: _fbp (Facebook pixel), fr (Facebook), bscookie (LinkedIn), mc
-social_media:  lidc (LinkedIn Insight Tag), tr
-```
-
-**The gap:** `advertisement` and `social_media` cookies — including the **Facebook pixel** (`_fbp`) and **LinkedIn Insight Tag** (`lidc`) — are defined in the configuration but have **no corresponding consent category in the UI**. A visitor who accepts only functional cookies, or only analytics cookies, is not presented with an advertising opt-in — yet advertising cookies are mapped to those categories.
-
-Under GDPR Art. 6(1)(a) and the ePrivacy Directive, advertising and social tracking cookies require explicit, informed, unambiguous opt-in consent. The current setup does not provide that.
-
-**Fix:** Add an "Advertentie & Social Media" category to the banner. Gate `_fbp`, `lidc`, `bscookie`, `fr` behind it. Increment the policy version on each update.
+**The gap:** `advertisement` and `social_media` cookies — including the **Facebook pixel** (`_fbp`) and **LinkedIn Insight Tag** (`lidc`) — are loaded but have **no corresponding consent category in the UI**.
 
 ---
 
 ## 5. 🟡 Medium — LinkedIn Brand Name Inconsistency
 
-**Finding:** ECS operates under **three different names** across its own channels simultaneously.
-
-| Channel | Name used |
-|---------|-----------|
-| ecs.be website | ECS European Containers |
-| LinkedIn company URL (old, still linked from site) | `ecs-european-containers` → 301 redirect |
-| LinkedIn company page (current) | ECS Intermodal Supply Chain |
-| CEO LinkedIn profile title | **ECS Group** |
-
-Three names, zero consistency. A prospect who visits the website, then searches LinkedIn, then clicks the CEO profile encounters a different company name at every step.
+ECS operates under **three different names** across its own channels simultaneously:
+- `ecs.be`: ECS European Containers
+- `LinkedIn URL`: `ecs-european-containers` → 301 redirect
+- `LinkedIn Page Name`: ECS Intermodal Supply Chain
+- `CEO Profile`: **ECS Group**
 
 ---
 
-## 6. 🟡 Medium — CEO LinkedIn Branding: Before & After
-
+## 6. 🎭 Executive Branding: Before & After Analysis
 The CEO's profile carries LinkedIn's **default abstract grey-teal background** — no ECS logo, no brand colour.
 
-### Side-by-Side Analysis
+### Side-by-Side Comparison
 ![Before and after comparison](./screenshots/comparison.png)
 
-| Aspect | Before (Default) | After (Designed) |
+| Aspect | Before (Abstract) | After (Branded) |
 | :--- | :--- | :--- |
 | **Visual Signal** | Generic Abstract | ECS Burgundy & Gold Identity |
 | **Messaging** | None | "Together We Excel" Tagline |
-| **Authority** | Passive | Engineering Leader Profile |
+| **Authority** | Passive profile | Engineering Leader Profile |
 
-> **Audit Action:** I designed a custom **ECS-branded banner** (`#8D1D45` / `#F8CE3E`) as part of this audit to instantly elevate executive authority. Design time: 15 min. Impact: High.
+> **Audit Action:** I designed a custom **ECS-branded banner** (`#8D1D45` / `#F8CE3E`) to instantly elevate executive authority.
 
 ---
 
@@ -180,11 +142,16 @@ graph TD
 
 ---
 
-## 🛡️ Digital Brexit Case Study: UK-Corridor Optimization
-Brexit transformed the UK corridor into a digital challenge. ECS responded by building a digital 'Green Lane':
-- **Middleware Integration:** Real-time TMS coupling with PLDA (BE) and GVMS (UK) customs systems.
-- **Result:** Gate-to-gate time reduced from **240 min to 45 min** (-81%).
-- **ROI:** Estimated savings of **€40,000 per week** in avoided idle time costs.
+## 8. 🛡️ Digital Brexit Strategy (Case Study)
+ECS reageerde op de Brexit door **"Customs as Code"** te implementeren.
+- **Middleware:** Directe API-koppeling TMS ↔ PLDA/GVMS.
+- **Resultaat:** Gate-to-gate tijd van **240 min naar 45 min** (-81%).
+- **ROI:** Besparing van ca. **€40.000 per week** aan vermeden stilstandkosten.
+
+---
+
+## 9. 🟢 Low — T&C PDFs Fully Indexable
+The `robots.txt` on ecs.be does not disallow `/sites/default/files/`. All T&C documents are guessable by search engines or researchers.
 
 ---
 
@@ -197,10 +164,4 @@ Brexit transformed the UK corridor into a digital challenge. ECS responded by bu
 | [**ecs-ecoload**](https://github.com/KippieG/ecs-ecoload) | Super Mega Trailer load optimizer & live reefer monitor. | .NET 10 · Angular |
 
 ---
-
-<div align="center">
-
-**Philippe Godfroy** · [philgodf@gmail.com](mailto:philgodf@gmail.com)  
-[github.com/KippieG](https://github.com/KippieG)
-
-</div>
+*Geauditeerd door Philippe Godfroy (Logistics Master Hub)*

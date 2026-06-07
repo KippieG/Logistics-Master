@@ -4,18 +4,16 @@
 ![Market](https://img.shields.io/badge/POSITION-MARKET_LEADER-00E5FF?style=for-the-badge)
 ![DNA](https://img.shields.io/badge/DNA-INTERMODAL_ENGINEERING-512BD4?style=for-the-badge)
 
-## 💡 Strategic Intelligence & Market Insights
+## 💡 Genius Insights: The Strategic Edge
 
-### 🌐 Market Position
-ECS is een **premium intermodale orchestrator**, die de corridor tussen het Europese vasteland en de UK/Ierland domineert. Sinds de overname van 2XL is de organisatie getransformeerd van een transportbedrijf naar een integraal **"Supply Chain Engineering"** model.
-
-### 🔑 Key Findings
-- **Retail Dominance:** Cruciale logistieke partner voor UK retail-giganten zoals **Tesco, ASDA en Sainsbury's**.
-- **Physical MOAT:** Het 40m hoge geautomatiseerde hoogbouwmagazijn met **76.000 palletplaatsen** biedt een fossielvrij, 24/7 operationeel voordeel dat handmatige concurrenten niet kunnen evenaren.
-- **Data Strategy:** Diepgaande samenwerking met **element61** voor een op Azure gebaseerd *Modern Data Platform*.
-
-> ### 🚀 Genius Insight: The "Retail-Buffer" Logic
+> ### 🚀 Insight 1: The "Retail-Buffer" Logic
 > ECS heeft het transportmodel omgedraaid. In plaats van goederen zo snel mogelijk te verplaatsen, bieden zij **"Strategische Buffering"**. Door hun geautomatiseerde Zeebrugge-hub te gebruiken als een *Just-in-Time* feeder voor de Britse markt, omzeilen ze dure Britse warehousing en havencongestie. Ze leveren exact wanneer het schap gevuld moet worden.
+
+> ### 🏗️ Insight 2: Physical-Digital Synergy
+> Veel logistieke bedrijven hebben óf goede software óf goede hardware. ECS bezit **beide**. Het SSI Schäfer WCS (hardware control) praat direct met hun Azure Cloud (software intelligence). Dit maakt "Dark Warehousing" (volledig onbemande operatie) in de toekomst mogelijk.
+
+> ### 🌍 Insight 3: The "Brexit-Moat"
+> Terwijl anderen Brexit zagen als een last, heeft ECS het gedigitaliseerd. Door douane-software in hun kernprocessen te bakken, hebben ze een barrière gecreëerd voor kleinere spelers die de administratieve complexiteit niet aankunnen.
 
 ---
 
@@ -24,20 +22,11 @@ ECS is een **premium intermodale orchestrator**, die de corridor tussen het Euro
 > Publiek onderzoek op basis van **openbare bronnen**: ecs.be, LinkedIn-vacatures, flows.be en persberichten. 
 > Laatste update: juni 2026.
 
-## Snapshot
-```
-ECS European Containers NV
-├── Opgericht  : 1985 (familiebedrijf)
-├── HQ         : Zeebrugge, België
-├── Medewerkers: ~654 (totaal)
-├── IT-team    : ~20 personen
-├── Omzet      : ~€507M (2023)
-└── Actief in  : 31+ Europese landen
-```
+Een gestructureerd overzicht van de IT-organisatie van **ECS European Containers NV** (Zeebrugge) — voor iedereen die wil begrijpen hoe deze logistieke groep zijn IT heeft ingericht: structuur, techstack, systemen, vacatures en strategische richting.
 
 ---
 
-## 🏢 Bedrijfsoverzicht
+## 🏢 Bedrijfsoverzicht — ECS European Containers
 
 ### Identiteit
 | | |
@@ -45,13 +34,19 @@ ECS European Containers NV
 | **Volledige naam** | ECS European Containers NV |
 | **Opgericht** | 1985 |
 | **Type** | Familiebedrijf (privaat) |
+| **HQ** | Baron de Maerelaan 155, 8380 Zeebrugge |
 | **Website** | [ecs.be](https://www.ecs.be/en) |
 
-### Kerncijfers (Omzet)
-- 2020: €400M
-- 2021: €416M
-- 2022: €524M
-- 2023: €507M
+### Kerncijfers
+- **Omzet 2023:** ~€507M
+- **Medewerkers:** ~654 (totaal)
+- **IT-team:** ~20 personen
+- **Actief in:** 31+ Europese landen
+
+### Activiteiten
+- Intermodaal transport (UK / Ierland ↔ Europees vasteland)
+- Supply chain logistiek & temperatuurgecontroleerd transport
+- Brexit & douanediensten
 
 ---
 
@@ -75,7 +70,7 @@ CEO
 
 ---
 
-## 💻 Technologiestack
+## 💻 Technologiestack — Volledig Overzicht
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -85,37 +80,49 @@ CEO
 │  CUSTOM DEV      │  .NET / C# / ASP.NET Core · Angular          │
 │  DATABASE        │  MS SQL Server · T-SQL                        │
 │  CLOUD           │  Microsoft Azure (in migratie)                │
+│  DEVOPS          │  Docker · Kubernetes                          │
 │  BI / DATA       │  Power BI · T-SQL · element61 stack           │
+│  AUTOMATISERING  │  Power Platform · Power Automate · RPA        │
 │  ARCHITECTUUR    │  EDA · DDD · Microservices · Scrum/Agile      │
 └──────────────────┴──────────────────────────────────────────────┘
 ```
 
 ### Technologische volwassenheid
-- **.NET / C# Stack:** ████████████████████ (Kern)
-- **Azure Cloud:** ████████░░░░░░░░░░░░ (In Migratie)
-- **Data & AI:** ███░░░░░░░░░░░░░░░░░ (In Opbouw)
+- **.NET / C# Stack:** ████████████████████ (Kern, 10+ jaar)
+- **Azure Cloud:** ████████░░░░░░░░░░░░ (In Actieve Migratie)
+- **Power Platform:** ████████░░░░░░░░░░░░ (Actief, RPA in gebruik)
+- **Data & AI:** ███░░░░░░░░░░░░░░░░░ (Nieuw team in opbouw)
 
 ---
 
 ## 🗄️ Bedrijfsapplicaties & Systemen
 
-- **Microsoft Dynamics 365 Business Central (ERP):** Het centrale hart voor Finance en HR.
-- **TAS (Transport Administration System):** Beheert zendingen en routes. Gekoppeld aan het klantportaal.
-- **WACS (Warehouse Administration & Control System):** Beheert de warehousingoperaties en koelmagazijnen.
+- **Microsoft Dynamics 365 Business Central (ERP):** Het centrale hart voor Finance, HR en Inkoop.
+- **TAS (Transport Administration System):** TMS voor transportplanning en track-and-trace.
+- **WACS (Warehouse Administration & Control System):** WMS orkestratie voor high-bay automatisering.
 - **Klantportalen (Eigen .NET/Angular bouw):** Zelfbediening voor intermodaal en supply chain klanten.
 
 ---
 
-## 📋 IT Vacatures & Groei
-ECS bouwt systematisch IT-management op. Recente rollen:
-- **Digital Solutions Expert:** Brug tussen business en IT (Power Platform, RPA).
-- **Software Developer:** .NET & Angular core development.
+## 🔭 Strategische Inzichten & Groei
+
+1. **Bewuste IT-professionalisering:** Top-down opbouw van managementlagen (Application Delivery, Infra, Data).
+2. **Microsoft-ecosysteem als anker:** Bewuste keuze voor de volledige stack (Azure, BC, Power Platform).
+3. **Interne software als Moat:** De eigen portalen en operationele platformen zijn een strategische differentiator.
+4. **Data als nieuwe groeias:** Transitie van data als bijproduct naar data als strategische asset.
+
+---
+
+## 📋 IT Vacatures (Juni 2026)
+
+- **Digital Solutions Expert ⭐:** Brug tussen business en IT (Power Platform, RPA).
+- **Software Developer:** .NET & Angular core development voor nieuwe applicaties.
 - **Teamlead Data & AI:** De nieuwe managementlaag voor data-gedreven logistiek.
 
 ---
 
 ## 🏁 Finale Conclusie & Strategisch Advies
-ECS is getransformeerd naar een **data-gedreven, Microsoft-first logistieke organisatie**. De grootste kans ligt nu in het consolideren van alle data-silo's naar een unified Azure Data Lake om voorspellende logistiek op schaal uit te rollen.
+ECS European Containers is getransformeerd naar een **data-gedreven, Microsoft-first logistieke organisatie**. De cultuur van het familiebedrijf combineert met de schaal van een internationale tech-speler. De grootste kans ligt nu in het ontsluiten van voorspellende logistiek op basis van hun enorme datasets.
 
 ---
 *Gegenereerd door de Logistics Master Hub Intelligence Bot*
