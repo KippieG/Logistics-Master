@@ -1,28 +1,14 @@
-# ECS (Electronic Commerce Solutions) Suite
+# 🏢 ECS European Containers
 
-Welkom bij de centrale repository voor de ECS applicatie suite. Deze monorepo bevat alle componenten, van research en strategie tot de daadwerkelijke implementatie.
+Welkom bij het centrale dossier voor ECS European Containers. Dit dossier is opgedeeld in twee hoofdonderdelen: operationele audits en strategische research.
 
-## Structuur
+## 📂 Inhoud
 
-- **`apps/`**: Bevat de functionele applicaties.
-  - **`ecoload/`**: De kern applicatie (Backend, Frontend, Simulator).
-  - **`digital-twin/`**: Visualisatie en prototyping omgeving.
-- **`docs/`**: Project documentatie en onderzoek.
-  - **`research/`**: Marktonderzoek, strategie, organisatie en vacatures.
-  - **`audit/`**: Digitale audits en rapportages.
+1.  **[🛡️ Digital Presence Audit](./AUDIT.md)**
+    Een diepgaande analyse van de online aanwezigheid, security gaten (HTTPS/DNS) en branding optimalisaties voor de CEO en de organisatie.
 
-## Aan de slag
-
-### Prerequisites
-- Docker & Docker Compose
-- .NET 8 SDK (voor backend)
-- Node.js & Angular CLI (voor frontend)
-
-### Alles opstarten
-Ga naar de ecoload map om de volledige stack te draaien:
-```bash
-cd apps/ecoload
-docker-compose up --build
-```
+2.  **[🧠 Strategic Intelligence & Research Hub](./INTELLIGENCE.md)**
+    Een geconsolideerd overzicht van het IT-landschap (Azure/SSRS), de organisatiestructuur, technologiestack (WAMAS/SSI Schäfer) en strategische marktinzichten.
 
 ---
+*Onderdeel van de Logistics-Master Hub*
