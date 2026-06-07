@@ -1,8 +1,0 @@
-<Solution>
-  <Folder Name="/src/">
-    <Project Path="src/ECS.EcoLoad.API/ECS.EcoLoad.API.csproj" />
-  </Folder>
-  <Folder Name="/tests/">
-    <Project Path="tests/ECS.EcoLoad.Tests/ECS.EcoLoad.Tests.csproj" />
-  </Folder>
-</Solution>
