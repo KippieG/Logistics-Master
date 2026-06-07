@@ -4,34 +4,39 @@
 ![Sector](https://img.shields.io/badge/SECTOR-INTERMODAL_LOGISTICS-00E5FF?style=for-the-badge)
 ![Tech Stack](https://img.shields.io/badge/TECH_STACK-MICROSOFT_AZURE-512BD4?style=for-the-badge)
 
-## 🌐 Executive Overview
-ECS European Containers is een toonaangevende intermodale logistieke speler met het hoofdkantoor in Zeebrugge. Sinds de overname van 2XL is de organisatie getransformeerd tot een **"Intermodal Engineering"** krachtpatser. Met een omzet van meer dan **€500M** en een vloot die 31+ landen doorkruist, is ECS de ruggengraat van de corridor tussen het Europese vasteland en de UK/Ierland.
+Welcome to the definitive digital dossier for **ECS European Containers**. This master document consolidates years of technical research, digital audits, and strategic analysis into a single, high-impact overview of one of Zeebrugge's logistics giants.
 
 ---
 
 ## 💡 Strategic Intelligence & Market Insights
 
-### 🔑 Key Findings (Market Scrapes)
-- **Retail Dominance:** Diepe integratie met UK retail-giganten (Tesco, ASDA, Sainsbury's). Zeebrugge fungeert als hun externe voorraadschuur.
-- **Physical MOAT:** Het 40m hoge geautomatiseerde magazijn met **76.000 palletplaatsen** is een onneembare vesting van efficiëntie.
-- **Data Strategy:** Exclusieve focus op het **Microsoft Azure Modern Data Platform** in samenwerking met **element61**.
+### 🌐 Market Position
+ECS is a premium intermodal orchestrator, dominating the corridor between mainland Europe and the UK/Ireland. Since the 2XL acquisition, they have evolved into a **"Supply Chain Engineering"** model.
+
+### 🔑 Key Findings
+- **Retail Dominance:** Critical logistics partner for UK retail giants (Tesco, ASDA, Sainsbury's).
+- **Physical MOAT:** Their 40m high-bay automated warehouse (**76,000 pallet spaces**) provides a fossil-free, 24/7 operational advantage.
+- **Data Strategy:** Deep partnership with **element61** for an Azure-based Modern Data Platform.
 
 > ### 💡 Genius Insight: The "Retail-Buffer" Logic
-> ECS heeft het transportmodel omgedraaid. In plaats van goederen zo snel mogelijk te verplaatsen, bieden zij **"Strategische Wachttijd"**. Door goederen in hun geautomatiseerde hoogbouwmagazijn in Zeebrugge te bufferen, kunnen ze exact op het juiste moment (Just-in-Time) de UK markt voeden, wat enorme kosten bespaart op Britse warehousing en congestie.
+> ECS has flipped the traditional transport model. Instead of just moving goods fast, they offer **"Strategic Buffering"**. By utilizing their automated Zeebrugge hub as a JIT (Just-in-Time) feeder for the UK market, they bypass expensive UK warehousing and port congestion, delivering exactly when the shelf needs filling.
 
 ---
 
-## 🛡️ Digital Presence & IT-Audit
+## 🛡️ Digital Presence & Operational Audit
 
-### 1. Corporate Identity & Leadership Branding
-- **LinkedIn Case:** Succesvolle transformatie van het executive team naar thought leaders. De focus ligt nu op "Engineering" in plaats van alleen "Transport".
-- **Resultaat:** Verhoogde aantrekkingskracht voor IT-talent en enterprise partners.
+### 📊 Audit Summary
+| # | Finding | Area | Severity | Fix Effort |
+|---|---------|------|----------|------------|
+| 1 | Supply Chain Portal completely dead (DNS NXDOMAIN) | Broken functionality | 🔴 Critical | Low |
+| 2 | Both customer portals use HTTP, not HTTPS | Security | 🟠 High | Low |
+| 3 | GDPR: advertising cookies fire without consent category | Compliance | 🟠 High | Low |
+| 4 | Brand Inconsistency: "ECS Group" vs "European Containers" | Brand | 🟡 Medium | Low |
 
-### 2. Operational Software Audit
-- **WMS Efficiency:** SSI Schäfer **WAMAS** orkestreert de volledige fysieke flow. Gebruik van **skimming robots** voor retail-optimalisatie is een benchmark in de sector.
-- **Ecoload Check:** Sterke visuele controle op reefer/trailer status, maar kansen voor verdere automatisering van douane-validaties (PLDA).
+### 🔍 Deep Dive: Executive Branding
+The CEO's LinkedIn profile was identified as a major brand gap (default abstract banner). I designed a custom **ECS-branded banner** to transform the profile into a professional thought-leader destination, aligning executive identity with corporate engineering excellence.
 
-### 📐 Process Visualization (Mermaid)
+### 📐 Operational Flow Visualization
 
 ```mermaid
 graph TD
@@ -47,38 +52,41 @@ graph TD
 ---
 
 ## 🛡️ Digital Brexit Case Study: UK-Corridor Optimization
-De Brexit zorgde voor een administratieve schok. ECS reageerde met een digitale 'Green Lane' strategie:
-- **Cloud Integration:** Real-time koppeling tussen het interne TMS en douane-systemen (PLDA/GVMS).
-- **Resultaat:** De gate-to-gate tijd daalde van **240 naar 45 minuten** (-81%).
-- **ROI:** Besparing van ca. **€40.000 per week** aan vermeden stilstandkosten.
+Brexit transformed the UK corridor into a digital challenge. ECS responded by building a digital 'Green Lane':
+- **Middleware Integration:** Real-time TMS coupling with PLDA (BE) and GVMS (UK) customs systems.
+- **Result:** Gate-to-gate time reduced from **240 min to 45 min** (-81%).
+- **Impact:** Estimated savings of **€40,000 per week** in avoided idle time costs.
 
 ---
 
-## 🚀 Strategic IT Roadmap
+## 💻 Technical Landscape & IT Strategy
 
-### 1. Cloud-Native Transformation
-- Volledige migratie van legacy on-premise workloads naar **Microsoft Azure**.
-- Adoptie van **Event Driven Architecture (EDA)** en **Domain Driven Design (DDD)** voor schaalbaarheid.
+### 🏗️ IT Stack Overview
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      ECS IT Landscape                           │
+├──────────────────┬──────────────────────────────────────────────┤
+│  APPLICATIES     │  Business Central · TAS · WACS · TopDesk     │
+│  CUSTOM DEV      │  .NET / C# / ASP.NET Core · Angular          │
+│  DATABASE        │  MS SQL Server · T-SQL                        │
+│  CLOUD           │  Microsoft Azure (active migration)           │
+│  DEVOPS          │  Docker · Kubernetes                          │
+│  BI / DATA       │  Power BI · T-SQL · element61 stack           │
+└──────────────────┴──────────────────────────────────────────────┘
+```
 
-### 2. Data & AI (The Next Frontier)
-- Aanstelling van een **Teamlead Data & AI** om de enorme datasets te ontsluiten.
-- **Predictive Analytics:** Voorspellen van vertragingen op de UK-corridor (zie `tools/delay-dna`).
-
-### 3. Hyperautomation
-- Uitrol van **RPA (Robotic Process Automation)** binnen Finance en HR.
-- Inzet van **Microsoft Copilot Studio** voor interne kennisontsluiting.
-
----
-
-## 🛠️ Tech Stack Overview
-| Laag | Technologie |
-| :--- | :--- |
-| **Backend** | .NET 8 / C# / ASP.NET Core |
-| **Frontend** | Angular / TypeScript |
-| **Database** | MS SQL Server / Azure SQL |
-| **Cloud** | Microsoft Azure |
-| **Automation** | Power Platform / Power Automate |
-| **BI** | Power BI / element61 stack |
+### 🚀 Strategic Roadmap
+1. **Data-Driven Evolution:** Moving from "data as a byproduct" to "data as a strategic asset" with the creation of a dedicated **Data & AI Team**.
+2. **Internal Software as Moat:** Developing in-house customer portals and intermodal planning engines to maintain deep domain control.
+3. **Hyperautomation:** Utilizing the **Microsoft Power Platform** and RPA to automate high-volume finance and HR workflows.
 
 ---
-*Samengesteld en geauditeerd door Philippe Godfroy (Logistics Master Hub)*
+
+## 📋 Professional Compliance Checklist
+- [x] **GDPR:** Gate access logging and driver data protection.
+- [x] **ISO 27001:** Azure-native security protocols.
+- [x] **ISPS:** Comprehensive port facility security compliance.
+- [x] **AEO:** Authorized Economic Operator status for customs facilitation.
+
+---
+*Authored, Audited & Engineered by Philippe Godfroy (Logistics Master Hub)*
