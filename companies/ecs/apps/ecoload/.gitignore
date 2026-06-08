@@ -1,0 +1,19 @@
+# .NET
+bin/
+obj/
+*.user
+.vs/
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+
+# General
+.DS_Store
+*.env
+*.log
+
+# Playwright (dev screenshots tool — niet voor de repo)
+/frontend/node_modules/playwright*
+/frontend/node_modules/@playwright*
