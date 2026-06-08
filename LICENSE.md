@@ -1,37 +1,36 @@
-# 📄 Logistics Master Hub: Professional & Architectural License
+# 📄 Logistics Master Hub: Strategic & Intellectual Ownership License
 
-**Copyright © 2026 Philippe Godfroy (KippieG). All Rights Reserved.**
-
----
-
-## 🏛️ Preamble: Human-AI Synthesis
-This repository represents a "God-tier" synthesis of deep logistics domain expertise, human strategic intuition, and advanced AI-assisted engineering. While Artificial Intelligence was utilized as a high-velocity co-pilot, the **Architectural Vision**, the **unique 'Genius Insights'**, and the **Strategic Decision-Making** remain the exclusive intellectual property of the author.
+**Copyright © 2026 Philippe Godfroy (KippieG).**
 
 ---
 
-## ⚖️ License Terms
+## 💡 The Human-Machine Collaboration
+This Hub is the result of intensive strategic thinking, real-world logistics experience, and advanced AI-assisted orchestration. While AI provided the velocity, the **original concepts, the logic, and the 'Genius Insights'** are the direct output of the author's brain and energy. 
 
-### 1. Permitted Use (Educational & Evaluation)
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Hub"), to:
-- **Review and evaluate** the Hub for the purpose of assessing the author's professional skills, architecture methodology, and technical expertise.
-- **Reference** the Hub as an educational resource in non-commercial settings, provided that full credit is given to the author.
-
-### 2. Commercial Restrictions (Proprietary Rights)
-This is **NOT** an open-source license for commercial redistribution. The following actions are strictly prohibited without express written consent from the author:
-- **Commercial Use:** Utilizing the core logic, audit frameworks, proprietary algorithms (e.g., *Eco-Match Engine*, *Delay-DNA*), or strategic intelligence for profit-generating activities.
-- **Consultancy Cloning:** Using the 'Digital Audit' or 'Strategic Roadmap' templates to provide competing consultancy services.
-- **Resale:** Selling, leasing, or sub-licensing any part of this Hub.
-
-### 3. Derivative Works
-You may modify the Hub for personal, private use. However, you may not redistribute modified versions of this Hub or any of its proprietary insights as your own work.
-
-### 4. Attribution
-Any public reference to the concepts, insights, or code contained in this Hub must include a visible attribution to: **Philippe Godfroy (@KippieG) - Logistics Master Hub.**
+This license is designed to be **open for exploration but closed for exploitation.**
 
 ---
 
-## 🛡️ Enforcement & Liability
-THE HUB IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE HUB.
+## ⚖️ Permitted Use (Open to the Community)
+You are welcome and encouraged to:
+- **Explore & Test:** Download, run, and test the tools within this Hub for personal or educational purposes.
+- **Learn:** Use the research, audits, and code as a learning resource for logistics architecture and digital transformation.
+- **Reference:** Share and discuss the insights found here, provided you include a clear link back to this repository and credit to **Philippe Godfroy (@KippieG)**.
 
 ---
-*By accessing, cloning, or utilizing this Hub, you acknowledge and agree to these terms.*
+
+## 🛡️ Intellectual Property Rights (Protecting the Work)
+To protect the years of work and expertise contained in this Hub, the following restrictions apply:
+1.  **Ownership:** The core strategic frameworks, 'Genius Insights', and proprietary algorithms (like *Eco-Match Engine*, *Delay-DNA*) remain the intellectual property of the author.
+2.  **No Commercial Cloning:** You may not use the specific audit reports, strategic roadmaps, or technical dossiers to build a competing consultancy business or commercial product without express written consent.
+3.  **No Unattributed Reuse:** You cannot copy large portions of this repository and present them as your own work elsewhere.
+
+---
+
+## 🤝 Collaboration & Consent
+I am a builder and a collaborator. If you want to use parts of this Hub for a commercial project, or if you want to build something on top of these foundations, **let's talk.** 
+
+Reach out via GitHub or LinkedIn for permissions or partnership opportunities.
+
+---
+*THE HUB IS PROVIDED "AS IS". USE AT YOUR OWN RISK. BY USING THIS HUB, YOU ACKNOWLEDGE THE VALUE OF HUMAN CREATIVITY SUPPORTED BY ARTIFICIAL INTELLIGENCE.*
