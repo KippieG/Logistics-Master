@@ -1,6 +1,6 @@
 # 📄 Logistics Master Hub: Strategic & Intellectual Ownership License
 
-**Copyright © 2026 Philippe Godfroy (KippieG).**
+**Copyright © 2026 Philippe Godfroy.**
 
 ---
 
