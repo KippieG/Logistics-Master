@@ -1,36 +1,45 @@
-# 📄 Logistics Master Hub: Strategic & Intellectual Ownership License
+# 📄 Logistics Master Hub - Proprietary License & Terms of Use
 
-**Copyright © 2026 Philippe Godfroy.**
-
----
-
-## 💡 The Human-Machine Collaboration
-This Hub is the result of intensive strategic thinking, real-world logistics experience, and advanced AI-assisted orchestration. While AI provided the velocity, the **original concepts, the logic, and the 'Genius Insights'** are the direct output of the author's brain and energy. 
-
-This license is designed to be **open for exploration but closed for exploitation.**
+**Copyright © 2026 Philippe Godfroy (KippieG). All Rights Reserved.**
 
 ---
 
-## ⚖️ Permitted Use (Open to the Community)
-You are welcome and encouraged to:
-- **Explore & Test:** Download, run, and test the tools within this Hub for personal or educational purposes.
-- **Learn:** Use the research, audits, and code as a learning resource for logistics architecture and digital transformation.
-- **Reference:** Share and discuss the insights found here, provided you include a clear link back to this repository and credit to **Philippe Godfroy (@KippieG)**.
+## 🛑 Proprietary Notice
+This repository and its entire contents—including but not limited to source code, architectural frameworks, strategic audits, intelligence reports, and proprietary algorithms—are the exclusive intellectual property of **Philippe Godfroy**. 
+
+This is **NOT** open-source software. Access to this repository is provided for evaluation and portfolio review purposes only.
 
 ---
 
-## 🛡️ Intellectual Property Rights (Protecting the Work)
-To protect the years of work and expertise contained in this Hub, the following restrictions apply:
-1.  **Ownership:** The core strategic frameworks, 'Genius Insights', and proprietary algorithms (like *Eco-Match Engine*, *Delay-DNA*) remain the intellectual property of the author.
-2.  **No Commercial Cloning:** You may not use the specific audit reports, strategic roadmaps, or technical dossiers to build a competing consultancy business or commercial product without express written consent.
-3.  **No Unattributed Reuse:** You cannot copy large portions of this repository and present them as your own work elsewhere.
+## ⚖️ License Terms
+
+### 1. Permitted Use
+Permission is hereby granted to individuals and organizations to:
+- **Review and Analyze:** Access and read the contents of this repository to evaluate the author's professional expertise and technical proficiency.
+- **Personal Education:** Utilize the materials for private, non-commercial learning and research.
+- **Deployment for Testing:** Run and test the applications in a local, non-production environment for the sole purpose of assessment.
+
+### 2. Commercial Restrictions (Strictly Prohibited)
+The following actions are strictly prohibited without a signed, written commercial agreement from the author:
+- **Commercial Exploitation:** Using any part of the code, logic, or frameworks (e.g., *Eco-Match Engine*, *Delay-DNA*, *YardExx*) within live business operations or production environments.
+- **Service Integration:** Integrating these tools into corporate systems or utilizing the strategic audit methodology to provide services to third parties.
+- **Redistribution & Resale:** Copying, modifying, or redistributing the contents of this Hub for any commercial purpose or financial gain.
+- **Derivative Works:** Creating and publishing derivative works based on the proprietary insights and logic found here.
+
+### 3. Attribution
+Any public reference to the concepts or insights contained in this Hub must include a prominent and mandatory attribution to: **Philippe Godfroy (@KippieG) - Logistics Master Hub.**
 
 ---
 
-## 🤝 Collaboration & Consent
-I am a builder and a collaborator. If you want to use parts of this Hub for a commercial project, or if you want to build something on top of these foundations, **let's talk.** 
+## 🤝 Commercial Inquiries & Licensing
+If you represent a logistics enterprise, terminal operator, or fleet manager and wish to utilize, implement, or build upon the foundations of this Master Hub, a **Commercial Implementation License** is required.
 
-Reach out via GitHub or LinkedIn for permissions or partnership opportunities.
+I am available for formal engagements regarding:
+- **Production-grade Deployment** of the platforms within this Hub.
+- **Custom Development** and integration of logistics-specific software.
+- **Strategic Consultancy** and technical architecture for port-wide systems.
+
+**Contact for Licensing:** [LinkedIn Profile](https://www.linkedin.com/in/philippegodfroy/) or via [GitHub](https://github.com/KippieG).
 
 ---
-*THE HUB IS PROVIDED "AS IS". USE AT YOUR OWN RISK. BY USING THIS HUB, YOU ACKNOWLEDGE THE VALUE OF HUMAN CREATIVITY SUPPORTED BY ARTIFICIAL INTELLIGENCE.*
+*THE HUB IS PROVIDED "AS IS". UNAUTHORIZED COMMERCIAL USE WILL BE SUBJECT TO INTELLECTUAL PROPERTY ENFORCEMENT.*
